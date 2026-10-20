@@ -31,3 +31,10 @@ git push origin dev/tu-nombre
 - Un commit por avance claro, con el número de la HU al inicio del mensaje.
 - Antes de programar una HU, su archivo en `specs/` debe existir.
 - No subir contraseñas, claves ni el archivo `.env`.
+
+## Base de datos y migraciones
+- `db.sqlite3` y `.env` nunca se suben: cada persona tiene los suyos.
+- Las migraciones (`sitio/migrations/`) sí se suben al repositorio.
+- Después de cada `git pull`, ejecutar `python manage.py migrate`.
+- Si dos personas cambian modelos, avisar al equipo antes de unir las ramas para evitar migraciones en conflicto.
+- Los mensajes de commit empiezan con el número de la HU cuando aplique (ejemplo: `HU-01: encabezado del inicio`). Para tareas de base del proyecto usar `Base:` (ejemplo: `Base: configuración de plantillas`).
