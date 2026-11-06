@@ -594,6 +594,61 @@
        "width": 320
       }
      ]
+    },
+    "Trazabilidad": {
+     "columns": [
+      {
+       "columnId": "id",
+       "width": 80
+      },
+      {
+       "columnId": "description",
+       "width": 430
+      },
+      {
+       "columnId": "prioridad",
+       "width": 110
+      },
+      {
+       "templateColumnId": "a1b2c3d4-0001-4000-8000-000000000001",
+       "width": 300
+      }
+     ]
+    },
+    "Solo Must": {
+     "columns": [
+      {
+       "columnId": "id",
+       "width": 80
+      },
+      {
+       "columnId": "description",
+       "width": 470
+      },
+      {
+       "columnId": "prioridad",
+       "width": 110
+      },
+      {
+       "columnId": "sprint",
+       "width": 70
+      }
+     ],
+     "filter": [
+      [
+       {
+        "attributeId": "prioridad",
+        "criterion": "attribute",
+        "value": "Must"
+       }
+      ]
+     ]
+    }
+   },
+   "templateColumns": {
+    "a1b2c3d4-0001-4000-8000-000000000001": {
+     "label": "Verificado por",
+     "template": "{{#eachInlinkWith type=\"verification\"}}\n  <p>&#x25C2; {{#hyperlink}}{{docObjId}}{{/hyperlink}}: {{shortDescription  maxLength=80}}</p>\n{{/eachInlinkWith}}\n"
     }
    }
   },
@@ -749,6 +804,28 @@
        "width": 560
       }
      ]
+    },
+    "Trazabilidad": {
+     "columns": [
+      {
+       "columnId": "id",
+       "width": 80
+      },
+      {
+       "columnId": "description",
+       "width": 380
+      },
+      {
+       "templateColumnId": "a1b2c3d4-0002-4000-8000-000000000002",
+       "width": 320
+      }
+     ]
+    }
+   },
+   "templateColumns": {
+    "a1b2c3d4-0002-4000-8000-000000000002": {
+     "label": "Verifica",
+     "template": "{{#eachOutlinkWith type=\"verification\"}}\n  <p>&#x25B8; {{#hyperlink}}{{docObjId}}{{/hyperlink}}: {{shortDescription  maxLength=80}}</p>\n{{/eachOutlinkWith}}\n"
     }
    }
   }

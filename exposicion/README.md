@@ -139,7 +139,7 @@ El proyecto completo es **un archivo** (`.reqw`, formato JSON abierto) que se pu
 
 **Verificación y validación.** Visure y Jama gestionan el ciclo completo de pruebas, incluida la ejecución y el registro de defectos. ReqView enlaza requisitos con casos de prueba y muestra la matriz, pero no ejecuta pruebas ni registra resultados.
 
-**Trazabilidad.** Es el punto fuerte de las tres. Jama la hace en vivo y en ambos sentidos; Visure la lleva hasta normas y riesgos; ReqView la resuelve con matriz y enlaces tipificados. En ReqView esto se comprobó en la práctica (sección 7).
+**Trazabilidad.** Es el punto fuerte de las tres. Jama la hace en vivo y en ambos sentidos; Visure la lleva hasta normas y riesgos; ReqView la resuelve con vistas de tabla y enlaces tipificados. En ReqView esto se comprobó en la práctica (sección 7).
 
 **Colaboración.** Aquí está la diferencia más grande. Visure y Jama son multiusuario por diseño, con roles, comentarios y revisión en línea. ReqView es un archivo: para trabajar en equipo hay que compartir carpeta, usar Git o mandarse el archivo. No tiene portal web para stakeholders.
 
@@ -270,6 +270,14 @@ Para que la demo no fuera un proyecto vacío, se construyó un proyecto de ReqVi
 
 Atributos personalizados creados: tipo, épica, prioridad MoSCoW, sprint, puntos y criterio de aceptación.
 
+Además, el proyecto trae preparadas tres vistas de tabla para la demo:
+
+| Vista | Documento | Qué muestra |
+|---|---|---|
+| `Principal` | Ambos | Todas las columnas del proyecto |
+| `Trazabilidad` | Ambos | Columna calculada `Verifica` (en Pruebas) y `Verificado por` (en Requisitos) |
+| `Solo Must` | Requisitos | Filtro guardado que deja las 17 historias Must |
+
 El proyecto pasó la validación oficial de la herramienta:
 
 ```
@@ -287,7 +295,7 @@ Finished - OK
 | Navegar la estructura por épicas | Sí | Árbol de documentos |
 | Ver atributos personalizados | Sí, en modo lectura | El proyecto trae 6; el plan limita a 1 para crearlos |
 | Filtrar por sprint y por prioridad | Sí | La documentación incluye filtros en FREE; los datos dan 8 historias en Sprint 1 y 17 Must |
-| Ver la matriz de trazabilidad | Sí | 4 enlaces requisito-prueba |
+| Ver la trazabilidad en una vista de tabla | Sí | Vista `Trazabilidad` con las columnas calculadas `Verifica` y `Verificado por`; 4 enlaces requisito-prueba |
 | Imprimir | Sí | Documentación oficial |
 | Editar el proyecto completo | **No** | FREE permite 1 documento, 150 objetos y 1 atributo |
 | Exportar a Excel | **No** | Ver mensaje abajo |
@@ -413,7 +421,7 @@ Los dos proyectos están en `exposicion/proyectos/`:
 
 ### Antes de empezar
 
-1. Abrir `Portafolio_ADB.reqw`.
+1. Abrir `Portafolio_ADB.reqw` con `File > Open File…` (no con `Ctrl+O`, que abre carpetas).
 2. Cerrar cualquier ventana de licencia; el plan FREE no pide nada.
 3. Tener a mano el PDF de requisitos por si preguntan de dónde salen las historias.
 
@@ -423,45 +431,56 @@ Los dos proyectos están en `exposicion/proyectos/`:
 
 ### Paso 2 — Mostrar la estructura (1 min)
 
-Abrir el documento **Requisitos - Portafolio ADB**.
+Hacer un clic en el documento **Requisitos - Portafolio ADB** del panel `Project`; se abre como pestaña abajo.
 
 > "Las 38 historias están agrupadas en las 5 épicas del proyecto. Cada historia conserva el texto original, su criterio de aceptación y los datos de planificación: épica, prioridad MoSCoW, sprint y puntos del Planning Poker."
 
-Señalar **HU-04** y mostrar texto y criterio en el panel de detalle.
+Seleccionar **HU-04** (`REQ-7`) y mostrar texto y criterio en el panel `Attributes` (`Ctrl+Alt+A`).
 
 ### Paso 3 — Mostrar la tabla y los filtros (1 min)
 
-Cambiar a la vista de tabla.
+La tabla es la vista central; no hay que "cambiar a vista de tabla".
 
 > "Aquí se ve el proyecto como una hoja de cálculo, pero con validación. Los 214 puntos suman exactamente lo que dice el Planning Poker, y puedo filtrar por sprint o por prioridad."
 
-Filtrar **Sprint 1** (quedan 8 historias) y **Must** (quedan 17).
+`Ctrl+Shift+F` y escribir `Sprint = 1` → quedan 8 historias.
+Luego `Prioridad MoSCoW: Must` → quedan 17.
+
+Plan B: `Ctrl+Alt+V` para abrir `Table Views` y clic en `Solo Must`.
+Antes del paso 6 hay que desactivar el filtro con `Ctrl+Alt+F`: con un filtro activo no se pueden crear objetos.
 
 ### Paso 4 — Mostrar trazabilidad (1 min)
 
-Abrir el documento **Pruebas - Portafolio ADB**.
+Abrir el documento **Pruebas - Portafolio ADB**, luego `Ctrl+Alt+V` y clic en la vista `Trazabilidad`.
 
 > "Cada prueba está enlazada con la historia que verifica. Esto es lo que el paper llama trazabilidad: si cambia un requisito, la herramienta muestra qué pruebas se ven afectadas."
 
-Abrir la matriz de trazabilidad o el enlace de una prueba hacia su historia.
+Hacer clic en el enlace de la columna `Verifica` (`REQ-7`, `REQ-8`, `REQ-9`, `REQ-13`) para saltar al requisito y volver con `Alt+←`.
+En el documento de requisitos, la misma vista tiene la columna `Verificado por`, que muestra el camino inverso.
 
 ### Paso 5 — Mostrar una limitación real (30 s)
 
-Intentar exportar a Excel desde el menú.
+`File > Export > XLSX File…`
 
 > "En el plan gratuito la exportación está bloqueada. Lo comprobamos: la herramienta responde 'Command Export XLSX is not available in FREE plan'. Es una limitación del plan, no un error de instalación."
 
+Cerrar el diálogo con `Esc` o `Enter`.
+
 ### Paso 6 — Crear un requisito en vivo (1,5 min)
 
-Abrir `Demo_Editable.reqw`.
+Abrir `Demo_Editable.reqw` con `File > Open File…`.
 
 > "Este proyecto pequeño sí se puede editar en FREE porque tiene un solo documento, un solo atributo y menos de 150 objetos."
 
-1. Clic derecho sobre la sección e insertar un requisito.
-2. Escribir: `HU-39 Aviso de privacidad en el pie de página`.
-3. Texto: `Como visitante quiero ver el aviso de privacidad en el pie para saber cómo se usan mis datos.`
-4. Tipo: `Historia de usuario`.
-5. Guardar con Ctrl+S.
+1. Clic en `Demo editable` en el panel `Project`.
+2. Clic en la última fila (**HU-10**, `DEMO-3`).
+3. `Ctrl+Enter` para insertar un objeto después. Aparece `DEMO-4`.
+4. Escribir el título: `HU-39 Aviso de privacidad en el pie de página`. Si el editor no se abre solo, `F2` y luego `Ctrl+H`.
+5. `Enter`, después `F2` y `Ctrl+T` para el texto:
+   `Como visitante quiero ver el aviso de privacidad en el pie para saber cómo se usan mis datos.`
+6. `Enter`.
+7. Opcional: en la columna `Tipo`, `F2` y elegir `Historia de usuario`.
+8. Guardar con `Ctrl+S`.
 
 > "Eso es crear, clasificar y guardar un requisito. En la versión de pago se agregan atributos ilimitados, exportación a Word, Excel y PDF, líneas base e historial de cambios."
 
