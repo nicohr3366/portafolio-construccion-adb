@@ -18,7 +18,7 @@ Comparación de tres herramientas y evaluación práctica de ReqView.
 | Comparar costos | Sección 5 |
 | Comparar facilidad de uso | Sección 6 |
 | Elegir una y evaluarla en la práctica | Sección 7 |
-| Instalarla y probarla | Sección 7.1 y 7.2 |
+| Instalarla y probarla | Sección 7.2 y 7.3 |
 | Hacer una demostración | Sección 10 |
 | Recomendar o no su uso | Sección 8 |
 | Concluir ventajas y desventajas | Sección 9 |
@@ -45,7 +45,7 @@ Se eligió **ReqView** para la evaluación práctica porque es la única que se 
 
 La Ingeniería de Requisitos es el proceso sistemático de **elicitar, especificar, analizar, validar y gestionar** requisitos a lo largo de todo el ciclo de vida. El paper de 2011 evalúa las herramientas con el cuestionario de la norma **ISO/IEC TR 24766** y las califica en estas categorías: elicitación, análisis, especificación, modelado, verificación y validación, gestión, trazabilidad, otras capacidades y precio global.
 
-Para esta exposición se usan esas mismas categorías, más cuatro que el uso real volvió necesarias: **colaboración y revisión, integraciones, reportes y exportación, y facilidad de uso**.
+Para esta exposición se usan esas mismas categorías, más tres que el uso real volvió necesarias: **colaboración y revisión, integraciones, y reportes y exportación**. La facilidad de uso se analiza aparte, en la sección 6.
 
 ### Advertencia sobre el paper
 
@@ -285,8 +285,8 @@ Finished - OK
 |---|---|---|
 | Abrir un proyecto de 2 documentos y 45 objetos | Sí | El proyecto abre sin errores |
 | Navegar la estructura por épicas | Sí | Árbol de documentos |
-| Ver atributos personalizados | Sí | 6 atributos visibles |
-| Filtrar por sprint y por prioridad | Sí | Sprint 1 deja 8 historias; Must deja 17 |
+| Ver atributos personalizados | Sí, en modo lectura | El proyecto trae 6; el plan limita a 1 para crearlos |
+| Filtrar por sprint y por prioridad | Sí | La documentación incluye filtros en FREE; los datos dan 8 historias en Sprint 1 y 17 Must |
 | Ver la matriz de trazabilidad | Sí | 4 enlaces requisito-prueba |
 | Imprimir | Sí | Documentación oficial |
 | Editar el proyecto completo | **No** | FREE permite 1 documento, 150 objetos y 1 atributo |
@@ -358,7 +358,7 @@ Para poder mostrar edición en vivo dentro del plan FREE, se creó un segundo pr
 
 **Desventajas**
 
-- El plan gratuito es de solo lectura y bloquea la exportación.
+- El plan gratuito solo permite editar proyectos mínimos (1 documento, 150 objetos, 1 atributo) y bloquea la exportación.
 - No tiene colaboración web ni portal para stakeholders.
 - No ejecuta pruebas ni gestiona su ciclo de vida.
 - No modela (nada de UML, SysML ni MBSE).
@@ -467,11 +467,11 @@ Abrir `Demo_Editable.reqw`.
 
 ### Paso 7 — Cierre y recomendación (1 min)
 
-> "¿La recomendamos? Sí, para equipos pequeños y proyectos como este: cuesta €440 al año por usuario en PRO, se instala en minutos y cubre elicitación, especificación, gestión y trazabilidad. No la recomendamos para una empresa grande con auditoría: ahí se queda corta frente a Jama o Visure. Y el plan gratuito no sirve para trabajar, solo para leer."
+> "¿La recomendamos? Sí, para equipos pequeños y proyectos como este: cuesta €440 al año por usuario en PRO, se instala en minutos y cubre especificación, gestión, verificación y trazabilidad. No la recomendamos para una empresa grande con auditoría: ahí se queda corta frente a Jama o Visure. Y el plan gratuito no sirve para trabajar, solo para leer."
 
 ### Si preguntan por qué no se usó el plan de pago
 
-> "Porque la tarea era evaluar la herramienta, no comprarla. Con el plan gratuito pudimos abrir un proyecto real, recorrer las 38 historias y comprobar la trazabilidad. La edición y la exportación las verificamos en el proyecto pequeño y en la documentación oficial de precios."
+> "Porque la tarea era evaluar la herramienta, no comprarla. Con el plan gratuito pudimos abrir un proyecto real, recorrer las 38 historias y comprobar la trazabilidad. La edición la mostramos en el proyecto pequeño, y la exportación comprobamos que está bloqueada en FREE y que existe en los planes de pago."
 
 ---
 
