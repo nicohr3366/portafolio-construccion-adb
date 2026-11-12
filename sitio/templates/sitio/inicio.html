@@ -1,7 +1,39 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Inicio | Alexander Drada{% endblock %}
 
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/inicio.css' %}">
+{% endblock %}
+
 {% block content %}
-<h1>Inicio</h1>
+<section class="hero" aria-labelledby="hero-titulo">
+    <p class="hero__eyebrow">Alexander Drada · Construcciones y Remodelaciones</p>
+    {# POR DEFINIR con Alexander #}
+    <h1 id="hero-titulo" class="hero__title">Construimos y remodelamos con calidad y cumplimiento</h1>
+    {# POR DEFINIR con Alexander #}
+    <p class="hero__text">Obra nueva, remodelación y acabados, de principio a fin.</p>
+    <nav class="hero__actions" aria-label="Accesos rápidos">
+        <a class="hero__button hero__button--primary" href="{% url 'sitio:servicios' %}">Ver servicios</a>
+        <a class="hero__button hero__button--secondary" href="{% url 'sitio:galeria' %}">Ver galería</a>
+        <a class="hero__button hero__button--secondary" href="{% url 'sitio:contacto' %}">Contactar</a>
+    </nav>
+</section>
+
+<section class="destacados" aria-labelledby="destacados-titulo">
+    <h2 id="destacados-titulo">Proyectos destacados</h2>
+    <ul class="destacados__lista">
+        {% for proyecto in proyectos_destacados %}
+        <li>
+            <article class="proyecto-card">
+                <img src="{% static proyecto.imagen %}" alt="{{ proyecto.nombre }}" width="1200" height="800" loading="lazy">
+                <h3 class="proyecto-card__nombre">{{ proyecto.nombre }}</h3>
+                <p class="proyecto-card__tipo">{{ proyecto.tipo }}</p>
+            </article>
+        </li>
+        {% endfor %}
+    </ul>
+    <a class="destacados__link" href="{% url 'sitio:galeria' %}">Ver galería completa</a>
+</section>
 {% endblock %}
