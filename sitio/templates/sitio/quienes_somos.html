@@ -1,7 +1,47 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Quiénes Somos | Alexander Drada{% endblock %}
 
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/quienes_somos.css' %}">
+{% endblock %}
+
 {% block content %}
-<h1>Quiénes Somos</h1>
+<section class="nosotros" aria-labelledby="nosotros-titulo">
+    {# POR DEFINIR con Alexander: foto real #}
+    <img class="nosotros__imagen" src="{% static 'img/quienes-somos/alexander.svg' %}" alt="Alexander Drada" width="800" height="800" loading="lazy">
+    <div class="nosotros__texto">
+        <h1 id="nosotros-titulo">Quiénes somos</h1>
+        {# POR DEFINIR con Alexander #}
+        <p>Alexander Drada es el propietario de Alexander Drada, Construcciones y Remodelaciones, y está al frente de cada obra que realiza la empresa.</p>
+    </div>
+</section>
+
+<section class="forma-trabajo" aria-labelledby="forma-trabajo-titulo">
+    <h2 id="forma-trabajo-titulo">Nuestra forma de trabajar</h2>
+    {# POR DEFINIR con Alexander #}
+    <p>Calidad en los entregables y cumplimiento: un cliente satisfecho nos recomienda a otro.</p>
+    <ul class="forma-trabajo__lista">
+        <li class="forma-trabajo__item">
+            <h3>Calidad</h3>
+            <p>Cuidamos cada detalle de la obra, desde la base hasta los acabados.</p>
+        </li>
+        <li class="forma-trabajo__item">
+            <h3>Cumplimiento</h3>
+            <p>Respetamos lo acordado con cada cliente.</p>
+        </li>
+    </ul>
+</section>
+
+<section class="experiencia" aria-labelledby="experiencia-titulo">
+    <h2 id="experiencia-titulo">Experiencia</h2>
+    {# POR DEFINIR con Alexander: años de experiencia y tipos de obra #}
+    <p>Trabajamos en construcción desde cero, remodelación y acabados.</p>
+</section>
+
+<nav class="nosotros__acciones" aria-label="Siguientes pasos">
+    <a class="nosotros__boton nosotros__boton--primary" href="{% url 'sitio:galeria' %}">Ver nuestros trabajos</a>
+    <a class="nosotros__boton nosotros__boton--secondary" href="{% url 'sitio:contacto' %}">Contactar</a>
+</nav>
 {% endblock %}
