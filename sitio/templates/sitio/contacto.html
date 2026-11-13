@@ -1,7 +1,14 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Contacto | Alexander Drada{% endblock %}
 
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/cotizacion.css' %}">
+{% endblock %}
+
 {% block content %}
 <h1>Contacto</h1>
+{# El botón apuntará al formulario de HU-17 #}
+{% include 'sitio/partials/como_se_cotiza.html' with boton_url='#formulario-contacto' %}
 {% endblock %}

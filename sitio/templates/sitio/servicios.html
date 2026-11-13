@@ -5,6 +5,7 @@
 
 {% block extra_head %}
     <link rel="stylesheet" href="{% static 'css/servicios.css' %}">
+    <link rel="stylesheet" href="{% static 'css/cotizacion.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -31,4 +32,7 @@
     {# POR DEFINIR con Alexander #}
     <p>Un solo equipo para todo el proyecto, desde cero hasta la entrega de llaves.</p>
 </section>
+
+{% url 'sitio:contacto' as url_contacto %}
+{% include 'sitio/partials/como_se_cotiza.html' with boton_url=url_contacto %}
 {% endblock %}

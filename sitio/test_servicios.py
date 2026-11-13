@@ -131,3 +131,47 @@ class FichasDeLosNueveServiciosTests(TestCase):
         for ruta in plantillas:
             contenido = (settings.BASE_DIR / ruta).read_text(encoding='utf-8')
             self.assertIn('{# POR DEFINIR con Alexander #}', contenido)
+
+
+class CotizacionTests(TestCase):
+    TEXTO = (
+        'No publicamos precios. Cada obra se cotiza de forma personalizada, '
+        'previa visita o evaluación técnica.'
+    )
+
+    def test_mismo_mensaje_en_servicios_y_contacto(self):
+        for url_name in ('servicios', 'contacto'):
+            response = self.client.get(reverse(f'sitio:{url_name}'))
+            self.assertContains(response, '¿Cómo se cotiza?')
+            self.assertContains(response, self.TEXTO)
+
+    def test_boton_de_servicios_lleva_a_contacto(self):
+        response = self.client.get(reverse('sitio:servicios'))
+        self.assertContains(
+            response,
+            f'class="boton-cotizacion" href="{reverse("sitio:contacto")}"',
+        )
+
+    def test_boton_de_contacto_apunta_al_formulario(self):
+        response = self.client.get(reverse('sitio:contacto'))
+        self.assertContains(
+            response,
+            'class="boton-cotizacion" href="#formulario-contacto"',
+        )
+
+    def test_ficha_reutiliza_el_boton_de_cotizacion(self):
+        url = reverse('sitio:servicio_detalle', args=[SERVICIOS[0]['slug']])
+        response = self.client.get(url)
+        self.assertContains(response, 'Pedir cotización')
+        self.assertContains(response, f'href="{reverse("sitio:contacto")}"')
+
+    def test_condiciones_de_la_visita_marcadas_por_definir(self):
+        ruta = settings.BASE_DIR / 'sitio/templates/sitio/partials/como_se_cotiza.html'
+        contenido = ruta.read_text(encoding='utf-8')
+        self.assertIn('POR DEFINIR con Alexander: condiciones de la visita', contenido)
+
+    def test_ninguna_pagina_muestra_simbolo_de_moneda(self):
+        paginas = ('inicio', 'servicios', 'galeria', 'quienes_somos', 'contacto')
+        for url_name in paginas:
+            response = self.client.get(reverse(f'sitio:{url_name}'))
+            self.assertNotIn('$', response.content.decode())

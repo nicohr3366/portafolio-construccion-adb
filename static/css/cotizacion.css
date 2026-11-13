@@ -1,0 +1,26 @@
+.cotizacion {
+    margin-top: var(--space-xl);
+    padding: var(--space-lg);
+    border-left: 4px solid var(--color-primary);
+}
+
+.cotizacion h2 {
+    margin-top: 0;
+}
+
+.boton-cotizacion {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: var(--space-sm) var(--space-lg);
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    border-radius: var(--radius);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.boton-cotizacion:hover {
+    background: var(--color-text);
+}
