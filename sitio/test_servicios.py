@@ -42,3 +42,21 @@ class CatalogoServiciosTests(TestCase):
                 self.html,
             )
             self.assertTrue(servicio['foto'].endswith('.svg'))
+
+
+class ObraCompletaTests(TestCase):
+    def setUp(self):
+        self.response = self.client.get(reverse('sitio:servicios'))
+
+    def test_bloque_dentro_de_servicios(self):
+        self.assertContains(self.response, 'Obra completa hasta entrega de llaves')
+        self.assertContains(
+            self.response,
+            'Un solo equipo para todo el proyecto, desde cero hasta la entrega de llaves.',
+        )
+
+    def test_seccion_con_titulo_asociado(self):
+        self.assertContains(
+            self.response,
+            'class="obra-completa" aria-labelledby="obra-completa-titulo"',
+        )

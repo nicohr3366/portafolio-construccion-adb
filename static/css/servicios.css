@@ -35,6 +35,21 @@
     color: var(--color-text-muted);
 }
 
+.obra-completa {
+    margin-top: var(--space-xl);
+    padding: var(--space-xl) var(--space-lg);
+    background: var(--color-surface);
+    border-radius: var(--radius);
+}
+
+.obra-completa h2 {
+    margin-top: 0;
+}
+
+.obra-completa p {
+    margin-bottom: 0;
+}
+
 @media (min-width: 40rem) {
     .catalogo {
         grid-template-columns: repeat(2, 1fr);
