@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ servicio.nombre }} | Alexander Drada{% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/servicios.css' %}">
+{% endblock %}
+
+{% block content %}
+<nav class="servicio-detalle__migas" aria-label="Ruta de navegación">
+    <a href="{% url 'sitio:servicios' %}">Servicios</a>
+    <span aria-hidden="true">&gt;</span>
+    <span>{{ servicio.nombre }}</span>
+</nav>
+
+<article class="servicio-detalle" aria-labelledby="servicio-titulo">
+    <img class="servicio-detalle__foto" src="{% static servicio.foto %}" alt="" width="1200" height="800">
+    <h1 id="servicio-titulo">{{ servicio.nombre }}</h1>
+    {# POR DEFINIR con Alexander #}
+    <p class="servicio-detalle__texto">{{ servicio.descripcion }}</p>
+    <a class="servicio-detalle__volver" href="{% url 'sitio:servicios' %}">Volver a Servicios</a>
+</article>
+{% endblock %}

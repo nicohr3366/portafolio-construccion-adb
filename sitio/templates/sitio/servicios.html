@@ -15,10 +15,12 @@
     {% for servicio in servicios %}
     <li>
         <article class="servicio-card">
-            <img src="{% static servicio.foto %}" alt="" width="1200" height="800" loading="lazy">
-            <h2 class="servicio-card__nombre">{{ servicio.nombre }}</h2>
-            {# POR DEFINIR con Alexander #}
-            <p class="servicio-card__texto">{{ servicio.descripcion_corta }}</p>
+            <a class="servicio-card__enlace" href="{% url 'sitio:servicio_detalle' servicio.slug %}">
+                <img src="{% static servicio.foto %}" alt="" width="1200" height="800" loading="lazy">
+                <h2 class="servicio-card__nombre">{{ servicio.nombre }}</h2>
+                {# POR DEFINIR con Alexander #}
+                <p class="servicio-card__texto">{{ servicio.descripcion_corta }}</p>
+            </a>
         </article>
     </li>
     {% endfor %}

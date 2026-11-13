@@ -15,6 +15,17 @@
     background: var(--color-bg);
 }
 
+.servicio-card__enlace {
+    display: block;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+}
+
+.servicio-card__enlace:hover .servicio-card__nombre {
+    text-decoration: underline;
+}
+
 .servicio-card img {
     display: block;
     width: 100%;
@@ -48,6 +59,33 @@
 
 .obra-completa p {
     margin-bottom: 0;
+}
+
+.servicio-detalle__migas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+    color: var(--color-text-muted);
+}
+
+.servicio-detalle__foto {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    border-radius: var(--radius);
+}
+
+.servicio-detalle__texto {
+    max-width: 40rem;
+}
+
+.servicio-detalle__volver {
+    display: inline-block;
+    margin-top: var(--space-md);
+    font-weight: 700;
 }
 
 @media (min-width: 40rem) {
