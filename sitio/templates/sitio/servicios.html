@@ -1,7 +1,26 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Servicios | Alexander Drada{% endblock %}
 
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/servicios.css' %}">
+{% endblock %}
+
 {% block content %}
-<h1>Servicios</h1>
+<h1>Nuestros servicios</h1>
+<p>Estos son los trabajos que puedes contratar con nosotros.</p>
+
+<ul class="catalogo">
+    {% for servicio in servicios %}
+    <li>
+        <article class="servicio-card">
+            <img src="{% static servicio.foto %}" alt="" width="1200" height="800" loading="lazy">
+            <h2 class="servicio-card__nombre">{{ servicio.nombre }}</h2>
+            {# POR DEFINIR con Alexander #}
+            <p class="servicio-card__texto">{{ servicio.descripcion_corta }}</p>
+        </article>
+    </li>
+    {% endfor %}
+</ul>
 {% endblock %}
