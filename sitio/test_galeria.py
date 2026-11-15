@@ -204,3 +204,84 @@ class ComandoProyectosEjemploTests(MediaTemporalMixin, TestCase):
 
         self.assertEqual(Proyecto.objects.count(), 6)
         self.assertEqual(FotoProyecto.objects.count(), 15)
+
+
+class GaleriaTests(MediaTemporalMixin, TestCase):
+    def setUp(self):
+        self.publicado = crear_proyecto(
+            'cocina-publicada',
+            nombre='Cocina publicada',
+            servicio='remodelacion',
+        )
+        self.foto = crear_foto(
+            self.publicado,
+            FotoProyecto.Tipo.DESPUES,
+            descripcion='Cocina terminada',
+        )
+        self.otro = crear_proyecto(
+            'piso-publicado',
+            nombre='Piso publicado',
+            servicio='pisos',
+        )
+        crear_foto(
+            self.otro,
+            FotoProyecto.Tipo.DESPUES,
+            descripcion='Piso terminado',
+        )
+        self.oculto = crear_proyecto(
+            'proyecto-oculto',
+            nombre='Proyecto oculto',
+            publicado=False,
+        )
+        self.response = self.client.get(reverse('sitio:galeria'))
+        self.html = self.response.content.decode()
+
+    def test_la_galeria_responde_200(self):
+        self.assertEqual(self.response.status_code, 200)
+
+    def test_usa_la_plantilla_de_galeria(self):
+        self.assertTemplateUsed(self.response, 'sitio/galeria.html')
+
+    def test_tiene_un_solo_h1(self):
+        self.assertEqual(self.html.count('<h1'), 1)
+        self.assertContains(self.response, 'Galería de proyectos')
+
+    def test_muestra_los_proyectos_publicados(self):
+        self.assertContains(self.response, self.publicado.nombre)
+        self.assertContains(self.response, self.otro.nombre)
+
+    def test_muestra_nombres_y_fotografias(self):
+        self.assertIn(self.foto.imagen.url, self.html)
+        for proyecto in (self.publicado, self.otro):
+            self.assertIn(proyecto.nombre, self.html)
+            self.assertIn(proyecto.nombre_del_servicio, self.html)
+
+    def test_no_muestra_los_proyectos_no_publicados(self):
+        self.assertNotIn(self.oculto.nombre, self.html)
+
+    def test_muestra_mensaje_cuando_no_hay_proyectos(self):
+        Proyecto.objects.all().delete()
+        response = self.client.get(reverse('sitio:galeria'))
+
+        self.assertContains(response, 'Pronto publicaremos nuestros proyectos.')
+
+    def test_las_tarjetas_enlazan_al_detalle(self):
+        self.assertIn(self.publicado.get_absolute_url(), self.html)
+        self.assertIn(self.otro.get_absolute_url(), self.html)
+
+    def test_el_detalle_de_un_proyecto_publicado_responde_200(self):
+        response = self.client.get(self.publicado.get_absolute_url())
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'sitio/proyecto_detalle.html')
+        self.assertContains(response, self.publicado.nombre)
+
+    def test_un_slug_inexistente_responde_404(self):
+        response = self.client.get('/galeria/no-existe/')
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_un_proyecto_no_publicado_responde_404(self):
+        response = self.client.get(self.oculto.get_absolute_url())
+
+        self.assertEqual(response.status_code, 404)

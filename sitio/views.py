@@ -1,7 +1,7 @@
 from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 
-from .catalogo import SERVICIOS
+from .catalogo import SERVICIOS, nombre_servicio, opciones_servicio
 from .models import Proyecto
 
 
@@ -47,7 +47,44 @@ def servicio_detalle(request, slug):
 
 
 def galeria(request):
-    return render(request, 'sitio/galeria.html')
+    publicados = Proyecto.objects.filter(publicado=True)
+    proyectos = publicados.prefetch_related('fotos')
+
+    servicios_con_proyectos = set(
+        publicados.values_list('servicio', flat=True)
+    )
+
+    filtros = [
+        {'slug': slug, 'nombre': nombre}
+        for slug, nombre in opciones_servicio()
+        if slug in servicios_con_proyectos
+    ]
+
+    servicio_activo = request.GET.get('servicio', '')
+
+    if servicio_activo not in servicios_con_proyectos:
+        servicio_activo = ''
+
+    if servicio_activo:
+        proyectos = proyectos.filter(servicio=servicio_activo)
+
+    proyectos = list(proyectos)
+
+    contexto = {
+        'proyectos': proyectos,
+        'filtros': filtros,
+        'servicio_activo': servicio_activo,
+        'nombre_servicio_activo': nombre_servicio(servicio_activo),
+        'antes_y_despues': [
+            p for p in proyectos if p.tiene_antes_y_despues
+        ],
+    }
+
+    return render(
+        request,
+        'sitio/galeria.html',
+        contexto
+    )
 
 
 def proyecto_detalle(request, slug):

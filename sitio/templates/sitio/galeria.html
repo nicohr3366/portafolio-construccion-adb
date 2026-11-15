@@ -1,7 +1,58 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Galería | Alexander Drada{% endblock %}
 
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/galeria.css' %}">
+{% endblock %}
+
 {% block content %}
-<h1>Galería</h1>
+<h1>Galería de proyectos</h1>
+
+{# POR DEFINIR con Alexander #}
+<p class="galeria__intro">
+    Aquí mostramos algunos de los trabajos que hemos realizado.
+</p>
+
+<ul class="galeria">
+    {% for proyecto in proyectos %}
+    <li class="galeria__item">
+        <article class="proyecto-tarjeta">
+            <a class="proyecto-tarjeta__enlace" href="{{ proyecto.get_absolute_url }}">
+                {% with foto=proyecto.foto_portada %}
+                    {% if foto %}
+                    <img
+                        class="proyecto-tarjeta__foto"
+                        src="{{ foto.imagen.url }}"
+                        alt="{{ foto.texto_alternativo }}"
+                        width="1200"
+                        height="800"
+                        loading="lazy"
+                    >
+                    {% else %}
+                    <img
+                        class="proyecto-tarjeta__foto"
+                        src="{% static 'img/galeria/sin-foto.svg' %}"
+                        alt=""
+                        width="1200"
+                        height="800"
+                        loading="lazy"
+                    >
+                    {% endif %}
+                {% endwith %}
+                <h2 class="proyecto-tarjeta__nombre">{{ proyecto.nombre }}</h2>
+                <p class="proyecto-tarjeta__servicio">{{ proyecto.nombre_del_servicio }}</p>
+                {% if proyecto.tiene_antes_y_despues %}
+                <span class="proyecto-tarjeta__etiqueta">Antes y después</span>
+                {% endif %}
+            </a>
+        </article>
+    </li>
+    {% empty %}
+    <li class="galeria__vacia-item">
+        <p class="galeria__vacia">Pronto publicaremos nuestros proyectos.</p>
+    </li>
+    {% endfor %}
+</ul>
 {% endblock %}
