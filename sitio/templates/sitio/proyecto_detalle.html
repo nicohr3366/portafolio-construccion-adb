@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ proyecto.nombre }} | Alexander Drada{% endblock %}
+
+{% block content %}
+{# Versión mínima: la completa es HU-14 #}
+<nav aria-label="Ruta de navegación">
+    <a href="{% url 'sitio:galeria' %}">Galería</a>
+    <span aria-hidden="true">&gt;</span>
+    <span>{{ proyecto.nombre }}</span>
+</nav>
+
+<article aria-labelledby="proyecto-titulo">
+    {% with foto=proyecto.foto_portada %}
+        {% if foto %}
+        <img
+            src="{{ foto.imagen.url }}"
+            alt="{{ foto.texto_alternativo }}"
+            width="1200"
+            height="800"
+        >
+        {% endif %}
+    {% endwith %}
+    <h1 id="proyecto-titulo">{{ proyecto.nombre }}</h1>
+    <p>{{ proyecto.nombre_del_servicio }}</p>
+    {# POR DEFINIR con Alexander #}
+    {{ proyecto.descripcion|linebreaks }}
+    <a href="{% url 'sitio:galeria' %}">Volver a la galería</a>
+</article>
+{% endblock %}
