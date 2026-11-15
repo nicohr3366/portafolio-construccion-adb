@@ -5,6 +5,7 @@
 
 {% block extra_head %}
     <link rel="stylesheet" href="{% static 'css/galeria.css' %}">
+    <link rel="stylesheet" href="{% static 'css/antes_despues.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -55,4 +56,16 @@
     </li>
     {% endfor %}
 </ul>
+
+{% if antes_y_despues %}
+<section class="galeria-comparacion" aria-labelledby="comparacion-titulo">
+    <h2 id="comparacion-titulo">Antes y después</h2>
+    {% for proyecto in antes_y_despues %}
+    <article class="galeria-comparacion__proyecto">
+        <h3><a href="{{ proyecto.get_absolute_url }}">{{ proyecto.nombre }}</a></h3>
+        {% include 'sitio/partials/antes_despues.html' with proyecto=proyecto %}
+    </article>
+    {% endfor %}
+</section>
+{% endif %}
 {% endblock %}

@@ -285,3 +285,68 @@ class GaleriaTests(MediaTemporalMixin, TestCase):
         response = self.client.get(self.oculto.get_absolute_url())
 
         self.assertEqual(response.status_code, 404)
+
+
+class AntesYDespuesTests(MediaTemporalMixin, TestCase):
+    def setUp(self):
+        self.comparado = crear_proyecto(
+            'proyecto-comparado',
+            nombre='Proyecto comparado',
+        )
+        self.antes = crear_foto(
+            self.comparado,
+            FotoProyecto.Tipo.ANTES,
+            descripcion='Antes de la obra',
+        )
+        self.despues = crear_foto(
+            self.comparado,
+            FotoProyecto.Tipo.DESPUES,
+            orden=1,
+            descripcion='Después de la obra',
+        )
+        self.solo_despues = crear_proyecto(
+            'solo-despues',
+            nombre='Solo después',
+        )
+        self.foto_solo_despues = crear_foto(
+            self.solo_despues,
+            FotoProyecto.Tipo.DESPUES,
+            descripcion='Resultado final',
+        )
+
+    def obtener_galeria(self):
+        response = self.client.get(reverse('sitio:galeria'))
+        return response, response.content.decode()
+
+    def obtener_comparacion(self):
+        response, html = self.obtener_galeria()
+        return response, html[html.index('comparacion-titulo'):]
+
+    def test_el_proyecto_con_antes_y_despues_aparece_en_el_comparativo(self):
+        _, comparacion = self.obtener_comparacion()
+
+        self.assertIn(self.comparado.nombre, comparacion)
+
+    def test_muestra_las_etiquetas_antes_y_despues(self):
+        _, comparacion = self.obtener_comparacion()
+
+        self.assertIn('<figcaption>Antes</figcaption>', comparacion)
+        self.assertIn('<figcaption>Después</figcaption>', comparacion)
+
+    def test_muestra_las_dos_fotografias_del_comparativo(self):
+        _, comparacion = self.obtener_comparacion()
+
+        self.assertIn(self.antes.imagen.url, comparacion)
+        self.assertIn(self.despues.imagen.url, comparacion)
+
+    def test_un_proyecto_sin_fotos_de_antes_no_aparece(self):
+        response, comparacion = self.obtener_comparacion()
+
+        self.assertNotIn(self.solo_despues.nombre, comparacion)
+        self.assertContains(response, self.solo_despues.nombre)
+
+    def test_sin_proyectos_comparables_no_se_muestra_la_seccion(self):
+        FotoProyecto.objects.filter(proyecto=self.comparado).delete()
+        _, html = self.obtener_galeria()
+
+        self.assertNotIn('comparacion-titulo', html)

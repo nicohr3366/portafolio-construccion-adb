@@ -125,3 +125,18 @@
 .proyecto-detalle__volver:hover {
     background: var(--color-surface);
 }
+
+.galeria-comparacion {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+}
+
+.galeria-comparacion__proyecto {
+    margin-bottom: var(--space-xl);
+}
+
+.galeria-comparacion__proyecto h3 {
+    margin: 0 0 var(--space-md);
+}
+
