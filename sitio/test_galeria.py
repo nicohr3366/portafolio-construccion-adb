@@ -1,3 +1,4 @@
+import re
 import shutil
 import tempfile
 from io import BytesIO, StringIO
@@ -350,3 +351,75 @@ class AntesYDespuesTests(MediaTemporalMixin, TestCase):
         _, html = self.obtener_galeria()
 
         self.assertNotIn('comparacion-titulo', html)
+
+
+class FiltrosGaleriaTests(MediaTemporalMixin, TestCase):
+    def setUp(self):
+        self.pisos = crear_proyecto(
+            'proyecto-pisos',
+            nombre='Proyecto de pisos',
+            servicio='pisos',
+        )
+        self.pintura = crear_proyecto(
+            'proyecto-pintura',
+            nombre='Proyecto de pintura',
+            servicio='pintura',
+        )
+        self.estuco = crear_proyecto(
+            'proyecto-estuco',
+            nombre='Proyecto de estuco',
+            servicio='estuco',
+            publicado=False,
+        )
+        self.response = self.client.get(reverse('sitio:galeria'))
+        self.html = self.response.content.decode()
+
+    def test_solo_muestra_los_proyectos_del_servicio_escogido(self):
+        response = self.client.get(
+            reverse('sitio:galeria') + '?servicio=pisos'
+        )
+
+        self.assertContains(response, self.pisos.nombre)
+        self.assertNotContains(response, self.pintura.nombre)
+
+    def test_existe_el_enlace_todos(self):
+        self.assertContains(self.response, 'Todos')
+
+    def test_el_enlace_todos_apunta_a_la_galeria(self):
+        self.assertIn('href="/galeria/"', self.html)
+
+    def test_sin_filtro_todos_es_el_activo(self):
+        enlace = re.search(r'<a[^>]*>Todos</a>', self.html)
+
+        self.assertIsNotNone(enlace)
+        self.assertIn('aria-current="page"', enlace.group(0))
+
+    def test_solo_aparecen_filtros_de_servicios_con_proyectos_publicados(self):
+        self.assertIn('?servicio=pisos', self.html)
+        self.assertIn('?servicio=pintura', self.html)
+        self.assertNotIn('?servicio=estuco', self.html)
+
+    def test_un_filtro_invalido_responde_200_y_muestra_todos(self):
+        response = self.client.get(
+            reverse('sitio:galeria') + '?servicio=nada'
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.pisos.nombre)
+        self.assertContains(response, self.pintura.nombre)
+
+
+class SinPreciosTests(MediaTemporalMixin, TestCase):
+    def test_la_galeria_no_muestra_precios_ni_montos(self):
+        proyecto = crear_proyecto(
+            'proyecto-con-fotos',
+            nombre='Proyecto con fotos',
+        )
+        crear_foto(proyecto, FotoProyecto.Tipo.ANTES)
+        crear_foto(proyecto, FotoProyecto.Tipo.DESPUES, orden=1)
+
+        response = self.client.get(reverse('sitio:galeria'))
+        html = response.content.decode().lower()
+
+        self.assertNotIn('$', html)
+        self.assertNotIn('precio', html)

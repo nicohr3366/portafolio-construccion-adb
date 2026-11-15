@@ -16,6 +16,30 @@
     Aquí mostramos algunos de los trabajos que hemos realizado.
 </p>
 
+<nav class="filtros" aria-label="Filtrar por servicio">
+    <ul class="filtros__lista">
+        <li>
+            <a class="filtros__enlace{% if not servicio_activo %} filtros__enlace--activo{% endif %}"
+               href="{% url 'sitio:galeria' %}"
+               {% if not servicio_activo %}aria-current="page"{% endif %}>Todos</a>
+        </li>
+        {% for filtro in filtros %}
+        <li>
+            <a class="filtros__enlace{% if servicio_activo == filtro.slug %} filtros__enlace--activo{% endif %}"
+               href="{% url 'sitio:galeria' %}?servicio={{ filtro.slug }}"
+               {% if servicio_activo == filtro.slug %}aria-current="page"{% endif %}>{{ filtro.nombre }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</nav>
+
+{% if servicio_activo %}
+<p class="filtros__resumen">
+    Mostrando: {{ nombre_servicio_activo }}.
+    <a href="{% url 'sitio:galeria' %}">Ver todos los proyectos</a>
+</p>
+{% endif %}
+
 <ul class="galeria">
     {% for proyecto in proyectos %}
     <li class="galeria__item">
