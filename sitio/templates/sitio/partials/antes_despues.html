@@ -1,0 +1,26 @@
+{% with antes=proyecto.fotos_antes.0 despues=proyecto.fotos_despues.0 %}
+    {% if antes and despues %}
+    <div class="antes-despues">
+        <figure class="antes-despues__foto">
+            <img
+                src="{{ antes.imagen.url }}"
+                alt="{{ antes.texto_alternativo }}"
+                loading="lazy"
+                width="1200"
+                height="800"
+            >
+            <figcaption>Antes</figcaption>
+        </figure>
+        <figure class="antes-despues__foto">
+            <img
+                src="{{ despues.imagen.url }}"
+                alt="{{ despues.texto_alternativo }}"
+                loading="lazy"
+                width="1200"
+                height="800"
+            >
+            <figcaption>Después</figcaption>
+        </figure>
+    </div>
+    {% endif %}
+{% endwith %}
