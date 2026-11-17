@@ -5,10 +5,11 @@
 
 {% block extra_head %}
     <link rel="stylesheet" href="{% static 'css/galeria.css' %}">
+    <link rel="stylesheet" href="{% static 'css/proyecto_detalle.css' %}">
+    <script src="{% static 'js/proyecto_detalle.js' %}" defer></script>
 {% endblock %}
 
 {% block content %}
-{# Versión mínima: la completa es HU-14 #}
 <nav class="galeria-migas" aria-label="Ruta de navegación">
     <a href="{% url 'sitio:galeria' %}">Galería</a>
     <span aria-hidden="true">&gt;</span>
@@ -16,29 +17,46 @@
 </nav>
 
 <article class="proyecto-detalle" aria-labelledby="proyecto-titulo">
+    <header class="proyecto__encabezado">
+        <h1 id="proyecto-titulo">{{ proyecto.nombre }}</h1>
+        <a class="proyecto-detalle__servicio" href="{% url 'sitio:galeria' %}?servicio={{ proyecto.servicio }}">{{ proyecto.nombre_del_servicio }}</a>
+    </header>
+
     {% with foto=proyecto.foto_portada %}
         {% if foto %}
-        <img
-            class="proyecto-detalle__foto"
-            src="{{ foto.imagen.url }}"
-            alt="{{ foto.texto_alternativo }}"
-            width="1200"
-            height="800"
-        >
+        <a class="proyecto__ampliar proyecto__ampliar--principal" href="{{ foto.imagen.url }}" data-ampliar data-alt="{{ foto.texto_alternativo }}">
+            <img class="proyecto-detalle__foto" src="{{ foto.imagen.url }}" alt="{{ foto.texto_alternativo }}" width="1200" height="800">
+            <span class="visually-hidden">Ampliar foto</span>
+        </a>
         {% else %}
-        <img
-            class="proyecto-detalle__foto"
-            src="{% static 'img/galeria/sin-foto.svg' %}"
-            alt=""
-            width="1200"
-            height="800"
-        >
+        <img class="proyecto-detalle__foto" src="{% static 'img/galeria/sin-foto.svg' %}" alt="" width="1200" height="800">
         {% endif %}
     {% endwith %}
-    <h1 id="proyecto-titulo">{{ proyecto.nombre }}</h1>
-    <p class="proyecto-detalle__servicio">{{ proyecto.nombre_del_servicio }}</p>
+
     {# POR DEFINIR con Alexander #}
     {{ proyecto.descripcion|linebreaks }}
-    <a class="proyecto-detalle__volver" href="{% url 'sitio:galeria' %}">Volver a la galería</a>
+
+    {% if proyecto.fotos.all %}
+    <section class="proyecto__fotos" aria-labelledby="titulo-fotos">
+        <h2 id="titulo-fotos">Fotos del proyecto</h2>
+        <ul class="proyecto__rejilla">
+            {% for foto in proyecto.fotos.all %}
+            <li>
+                <a class="proyecto__ampliar" href="{{ foto.imagen.url }}" data-ampliar data-alt="{{ foto.texto_alternativo }}">
+                    <img src="{{ foto.imagen.url }}" alt="{{ foto.texto_alternativo }}" width="1200" height="800" loading="lazy">
+                    <span class="visually-hidden">Ampliar foto</span>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
+
+    <a class="proyecto-detalle__volver" href="{{ url_volver }}">Volver a la galería</a>
 </article>
+
+<dialog class="visor" aria-label="Foto ampliada">
+    <img class="visor__imagen" alt="">
+    <button type="button" class="visor__cerrar">Cerrar</button>
+</dialog>
 {% endblock %}
