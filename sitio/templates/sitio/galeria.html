@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Galería | Alexander Drada{% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/galeria.css' %}">
+    <link rel="stylesheet" href="{% static 'css/antes_despues.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>Galería de proyectos</h1>
+
+{# POR DEFINIR con Alexander #}
+<p class="galeria__intro">
+    Aquí mostramos algunos de los trabajos que hemos realizado.
+</p>
+
+<nav class="filtros" aria-label="Filtrar por servicio">
+    <ul class="filtros__lista">
+        <li>
+            <a class="filtros__enlace{% if not servicio_activo %} filtros__enlace--activo{% endif %}"
+               href="{% url 'sitio:galeria' %}"
+               {% if not servicio_activo %}aria-current="page"{% endif %}>Todos</a>
+        </li>
+        {% for filtro in filtros %}
+        <li>
+            <a class="filtros__enlace{% if servicio_activo == filtro.slug %} filtros__enlace--activo{% endif %}"
+               href="{% url 'sitio:galeria' %}?servicio={{ filtro.slug }}"
+               {% if servicio_activo == filtro.slug %}aria-current="page"{% endif %}>{{ filtro.nombre }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</nav>
+
+{% if servicio_activo %}
+<p class="filtros__resumen">
+    Mostrando: {{ nombre_servicio_activo }}.
+    <a href="{% url 'sitio:galeria' %}">Ver todos los proyectos</a>
+</p>
+{% endif %}
+
+<ul class="galeria">
+    {% for proyecto in proyectos %}
+    <li class="galeria__item">
+        <article class="proyecto-tarjeta">
+            <a class="proyecto-tarjeta__enlace" href="{{ proyecto.get_absolute_url }}">
+                {% with foto=proyecto.foto_portada %}
+                    {% if foto %}
+                    <img
+                        class="proyecto-tarjeta__foto"
+                        src="{{ foto.imagen.url }}"
+                        alt="{{ foto.texto_alternativo }}"
+                        width="1200"
+                        height="800"
+                        loading="lazy"
+                    >
+                    {% else %}
+                    <img
+                        class="proyecto-tarjeta__foto"
+                        src="{% static 'img/galeria/sin-foto.svg' %}"
+                        alt=""
+                        width="1200"
+                        height="800"
+                        loading="lazy"
+                    >
+                    {% endif %}
+                {% endwith %}
+                <h2 class="proyecto-tarjeta__nombre">{{ proyecto.nombre }}</h2>
+                <p class="proyecto-tarjeta__servicio">{{ proyecto.nombre_del_servicio }}</p>
+                {% if proyecto.tiene_antes_y_despues %}
+                <span class="proyecto-tarjeta__etiqueta">Antes y después</span>
+                {% endif %}
+            </a>
+        </article>
+    </li>
+    {% empty %}
+    <li class="galeria__vacia-item">
+        <p class="galeria__vacia">Pronto publicaremos nuestros proyectos.</p>
+    </li>
+    {% endfor %}
+</ul>
+
+{% if antes_y_despues %}
+<section class="galeria-comparacion" aria-labelledby="comparacion-titulo">
+    <h2 id="comparacion-titulo">Antes y después</h2>
+    {% for proyecto in antes_y_despues %}
+    <article class="galeria-comparacion__proyecto">
+        <h3><a href="{{ proyecto.get_absolute_url }}">{{ proyecto.nombre }}</a></h3>
+        {% include 'sitio/partials/antes_despues.html' with proyecto=proyecto %}
+    </article>
+    {% endfor %}
+</section>
+{% endif %}
+{% endblock %}

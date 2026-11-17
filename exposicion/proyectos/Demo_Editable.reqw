@@ -1,0 +1,75 @@
+{
+ "id": "DemoEditable",
+ "documents": [
+  {
+   "id": "DEMO",
+   "name": "Demo editable",
+   "attributes": {
+    "type": {
+     "name": "Tipo",
+     "type": "enum",
+     "values": [
+      {
+       "key": "SEC",
+       "label": "Sección"
+      },
+      {
+       "key": "STORY",
+       "label": "Historia de usuario"
+      }
+     ]
+    }
+   },
+   "data": [
+    {
+     "id": "1",
+     "heading": "Demo editable - Portafolio ADB",
+     "type": "SEC",
+     "text": "<p>Proyecto pequeno para crear y editar requisitos en vivo con el plan FREE de ReqView. Un documento, un atributo y menos de 150 objetos.</p>",
+     "children": [
+      {
+       "id": "2",
+       "heading": "HU-04 Catálogo de servicios",
+       "type": "STORY",
+       "text": "<p>Como visitante quiero ver el catálogo de servicios para saber qué trabajos puedo contratar.</p>"
+      },
+      {
+       "id": "3",
+       "heading": "HU-10 Cómo se cotiza (sin precios)",
+       "type": "STORY",
+       "text": "<p>Como visitante quiero entender que los precios se dan con una cotización personalizada después de una visita o evaluación técnica.</p>"
+      }
+     ]
+    }
+   ],
+   "lastId": 3,
+   "views": {
+    "Principal": {
+     "default": true,
+     "columns": [
+      {
+       "columnId": "id",
+       "width": 80
+      },
+      {
+       "columnId": "type",
+       "width": 150
+      },
+      {
+       "columnId": "description",
+       "width": 650
+      }
+     ]
+    }
+   }
+  }
+ ],
+ "hierarchy": [
+  "DEMO"
+ ],
+ "attachments": {},
+ "traceability": {},
+ "metadata": {
+  "format": "2.22"
+ }
+}

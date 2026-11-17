@@ -1,0 +1,853 @@
+{
+ "id": "PortafolioADB",
+ "documents": [
+  {
+   "id": "REQ",
+   "name": "Requisitos - Portafolio ADB",
+   "attributes": {
+    "type": {
+     "name": "Tipo",
+     "type": "enum",
+     "values": [
+      {
+       "key": "SEC",
+       "label": "Sección"
+      },
+      {
+       "key": "EPIC",
+       "label": "Épica"
+      },
+      {
+       "key": "STORY",
+       "label": "Historia de usuario"
+      },
+      {
+       "key": "TEST",
+       "label": "Prueba"
+      }
+     ]
+    },
+    "epica": {
+     "name": "Épica",
+     "type": "enum",
+     "values": [
+      {
+       "key": "E1",
+       "label": "E1 - Presentación de la empresa"
+      },
+      {
+       "key": "E2",
+       "label": "E2 - Galería de proyectos"
+      },
+      {
+       "key": "E3",
+       "label": "E3 - Contacto"
+      },
+      {
+       "key": "E4",
+       "label": "E4 - Panel de administración"
+      },
+      {
+       "key": "E5",
+       "label": "E5 - Diseño y accesibilidad"
+      }
+     ]
+    },
+    "prioridad": {
+     "name": "Prioridad MoSCoW",
+     "type": "enum",
+     "values": [
+      {
+       "key": "Must"
+      },
+      {
+       "key": "Should"
+      },
+      {
+       "key": "Could"
+      }
+     ]
+    },
+    "sprint": {
+     "name": "Sprint",
+     "type": "int"
+    },
+    "puntos": {
+     "name": "Puntos",
+     "type": "int"
+    },
+    "acceptanceCriteria": {
+     "name": "Criterio de aceptación",
+     "type": "xhtml"
+    }
+   },
+   "data": [
+    {
+     "id": "1",
+     "heading": "Portafolio web Alexander Drada",
+     "type": "SEC",
+     "text": "<p>Requisitos del sitio web de Alexander Drada, Construcciones y Remodelaciones. 38 historias de usuario en 5 épicas, con criterios de aceptación, prioridad MoSCoW, sprint y puntos del Planning Poker.</p>",
+     "children": [
+      {
+       "id": "2",
+       "heading": "1. Introducción",
+       "type": "SEC",
+       "text": "<p>Este documento reúne las 38 historias de usuario del proyecto, agrupadas por épica. Cada historia conserva el criterio de aceptación acordado con el cliente y los datos de planificación: prioridad MoSCoW, sprint y puntos (1 punto = 1 hora).</p>",
+       "children": []
+      },
+      {
+       "id": "3",
+       "heading": "E1 - Presentación de la empresa",
+       "type": "EPIC",
+       "epica": "E1",
+       "children": [
+        {
+         "id": "4",
+         "heading": "HU-01 Como visitante quiero ver una página de inicio con el logo y un mensaj",
+         "text": "<p>Como visitante quiero ver una página de inicio con el logo y un mensaje claro de lo que hace la empresa para entender rápido qué ofrece y por qué confiar en ella.</p>",
+         "type": "STORY",
+         "epica": "E1",
+         "prioridad": "Must",
+         "sprint": 1,
+         "puntos": 6,
+         "acceptanceCriteria": "<p>Al abrir el sitio se ven el logo, el nombre de la empresa, una frase corta de presentación y accesos a Servicios, Galería y Contacto.</p>"
+        },
+        {
+         "id": "5",
+         "heading": "HU-02 Como visitante quiero ver fotos de trabajos terminados desde la página",
+         "text": "<p>Como visitante quiero ver fotos de trabajos terminados desde la página de inicio para darme cuenta de la calidad apenas entro.</p>",
+         "type": "STORY",
+         "epica": "E1",
+         "prioridad": "Must",
+         "sprint": 1,
+         "puntos": 5,
+         "acceptanceCriteria": "<p>El inicio muestra al menos 3 proyectos destacados con foto grande y un enlace a la galería.</p>"
+        },
+        {
+         "id": "6",
+         "heading": "HU-03 Como visitante quiero un menú con las secciones Inicio, Servicios, Gal",
+         "text": "<p>Como visitante quiero un menú con las secciones Inicio, Servicios, Galería, Quiénes Somos y Contacto para moverme fácil por la página.</p>",
+         "type": "STORY",
+         "epica": "E1",
+         "prioridad": "Must",
+         "sprint": 1,
+         "puntos": 4,
+         "acceptanceCriteria": "<p>El menú aparece en todas las páginas con las 5 secciones y cada enlace lleva a la sección correcta.</p>"
+        },
+        {
+         "id": "7",
+         "heading": "HU-04 Como visitante quiero ver el catálogo de servicios",
+         "text": "<p>Como visitante quiero ver el catálogo de servicios para saber qué trabajos puedo contratar.</p>",
+         "type": "STORY",
+         "epica": "E1",
+         "prioridad": "Must",
+         "sprint": 1,
+         "puntos": 5,
+         "acceptanceCriteria": "<p>Se muestran todos los servicios: construcción desde cero, remodelación, estuco, pintura, pisos, carpintería, cerrajería en aluminio, divisiones de baño y asesoría en acabados.</p>"
+        },
+        {
+         "id": "8",
+         "heading": "HU-05 Como visitante quiero saber que la empresa hace obras completas, desde",
+         "text": "<p>Como visitante quiero saber que la empresa hace obras completas, desde cero hasta la entrega de llaves, para contratar todo con una sola empresa.</p>",
+         "type": "STORY",
+         "epica": "E1",
+         "prioridad": "Should",
+         "sprint": 1,
+         "puntos": 3,
+         "acceptanceCriteria": "<p>En Servicios hay un bloque que explica el servicio integral de principio a fin.</p>"
+        },
+        {
+         "id": "9",
+         "heading": "HU-06 Como visitante quiero ver el detalle de cada servicio",
+         "text": "<p>Como visitante quiero ver el detalle de cada servicio para entender qué incluye antes de pedir una cotización.</p>",
+         "type": "STORY",
+         "epica": "E1",
+         "prioridad": "Should",
+         "sprint": 1,
+         "puntos": 7,
+         "acceptanceCriteria": "<p>Cada servicio tiene una descripción en palabras sencillas y al menos una foto de un trabajo real.</p>"
+        },
+        {
+         "id": "10",
+         "heading": "HU-07 Como visitante quiero conocer los tipos de piso que instalan (cerámica",
+         "text": "<p>Como visitante quiero conocer los tipos de piso que instalan (cerámica, porcelanato y mármol) para saber si trabajan el material que quiero.</p>",
+         "type": "STORY",
+         "epica": "E1",
+         "prioridad": "Could",
+         "sprint": 5,
+         "puntos": 3,
+         "acceptanceCriteria": "<p>El servicio de pisos muestra los tres materiales con su nombre y una foto.</p>"
+        },
+        {
+         "id": "11",
+         "heading": "HU-08 Como visitante quiero saber que la empresa me asesora en acabados",
+         "text": "<p>Como visitante quiero saber que la empresa me asesora en acabados para recibir ayuda al escoger materiales y colores.</p>",
+         "type": "STORY",
+         "epica": "E1",
+         "prioridad": "Could",
+         "sprint": 5,
+         "puntos": 3,
+         "acceptanceCriteria": "<p>La asesoría en acabados aparece como servicio con una descripción corta.</p>"
+        },
+        {
+         "id": "12",
+         "heading": "HU-09 Como visitante quiero leer la sección Quiénes Somos",
+         "text": "<p>Como visitante quiero leer la sección Quiénes Somos para conocer quién está detrás de la empresa y sentir confianza.</p>",
+         "type": "STORY",
+         "epica": "E1",
+         "prioridad": "Should",
+         "sprint": 1,
+         "puntos": 6,
+         "acceptanceCriteria": "<p>P8 La sección presenta a Alexander Drada, la forma de trabajar de la empresa (calidad y cumplimiento) y su experiencia.</p>"
+        },
+        {
+         "id": "13",
+         "heading": "HU-10 Como visitante quiero entender que los precios se dan con una cotizaci",
+         "text": "<p>Como visitante quiero entender que los precios se dan con una cotización personalizada después de una visita o evaluación técnica para saber cómo pedir un precio.</p>",
+         "type": "STORY",
+         "epica": "E1",
+         "prioridad": "Must",
+         "sprint": 1,
+         "puntos": 4,
+         "acceptanceCriteria": "<p>No aparece ningún precio en el sitio y en Servicios y Contacto hay un mensaje que explica cómo se cotiza, con un botón para pedir la cotización.</p>"
+        }
+       ]
+      },
+      {
+       "id": "14",
+       "heading": "E2 - Galería de proyectos",
+       "type": "EPIC",
+       "epica": "E2",
+       "children": [
+        {
+         "id": "15",
+         "heading": "HU-11 Como visitante quiero explorar la galería de proyectos terminados",
+         "text": "<p>Como visitante quiero explorar la galería de proyectos terminados para comprobar la calidad del trabajo de la empresa.</p>",
+         "type": "STORY",
+         "epica": "E2",
+         "prioridad": "Must",
+         "sprint": 2,
+         "puntos": 9,
+         "acceptanceCriteria": "<p>La galería muestra los proyectos publicados con una foto principal y su nombre, y carga sin errores.</p>"
+        },
+        {
+         "id": "16",
+         "heading": "HU-12 Como visitante quiero ver fotos del «antes y después»",
+         "text": "<p>Como visitante quiero ver fotos del «antes y después» para comparar cómo se recibió el inmueble en obra gris y cómo quedó terminado.</p>",
+         "type": "STORY",
+         "epica": "E2",
+         "prioridad": "Must",
+         "sprint": 2,
+         "puntos": 8,
+         "acceptanceCriteria": "<p>Los proyectos que tengan fotos de antes y después permiten verlas juntas en el mismo lugar.</p>"
+        },
+        {
+         "id": "17",
+         "heading": "HU-13 Como visitante quiero ver proyectos grandes con fotos del proceso y de",
+         "text": "<p>Como visitante quiero ver proyectos grandes con fotos del proceso y del resultado final (como el Colegio La Sagrada Familia) para ver que la empresa puede con obras de gran escala.</p>",
+         "type": "STORY",
+         "epica": "E2",
+         "prioridad": "Should",
+         "sprint": 2,
+         "puntos": 7,
+         "acceptanceCriteria": "<p>Un proyecto grande muestra sus fotos ordenadas: proceso de obra y resultado final.</p>"
+        },
+        {
+         "id": "18",
+         "heading": "HU-14 Como visitante quiero abrir un proyecto y ver sus fotos en grande con ",
+         "text": "<p>Como visitante quiero abrir un proyecto y ver sus fotos en grande con una descripción corta para conocer el trabajo en detalle.</p>",
+         "type": "STORY",
+         "epica": "E2",
+         "prioridad": "Should",
+         "sprint": 2,
+         "puntos": 7,
+         "acceptanceCriteria": "<p>Al hacer clic en un proyecto se abre su página o ventana con fotos ampliables y descripción; se puede volver a la galería.</p>"
+        },
+        {
+         "id": "19",
+         "heading": "HU-15 Como visitante quiero filtrar los proyectos por tipo de servicio",
+         "text": "<p>Como visitante quiero filtrar los proyectos por tipo de servicio para encontrar rápido trabajos parecidos a lo que necesito.</p>",
+         "type": "STORY",
+         "epica": "E2",
+         "prioridad": "Could",
+         "sprint": 2,
+         "puntos": 5,
+         "acceptanceCriteria": "<p>Al escoger un servicio solo se ven sus proyectos y se puede volver a ver todos.</p>"
+        },
+        {
+         "id": "20",
+         "heading": "HU-16 Como visitante quiero tener a la mano un botón",
+         "text": "<p>Como visitante quiero tener a la mano un botón para pedir cotización mientras veo un proyecto para no tener que buscar dónde hacerlo.</p>",
+         "type": "STORY",
+         "epica": "E2",
+         "prioridad": "Should",
+         "sprint": 2,
+         "puntos": 3,
+         "acceptanceCriteria": "<p>La página de cada proyecto tiene un botón que lleva al formulario de contacto.</p>"
+        }
+       ]
+      },
+      {
+       "id": "21",
+       "heading": "E3 - Contacto",
+       "type": "EPIC",
+       "epica": "E3",
+       "children": [
+        {
+         "id": "22",
+         "heading": "HU-17 Como visitante quiero llenar un formulario de contacto con mis datos y",
+         "text": "<p>Como visitante quiero llenar un formulario de contacto con mis datos y lo que necesito para que la empresa me contacte sin tener que llamar.</p>",
+         "type": "STORY",
+         "epica": "E3",
+         "prioridad": "Must",
+         "sprint": 3,
+         "puntos": 8,
+         "acceptanceCriteria": "<p>El formulario pide los datos acordados con el cliente y un mensaje, y se envía correctamente.</p>"
+        },
+        {
+         "id": "23",
+         "heading": "HU-18 Como visitante quiero escoger en el formulario el servicio que necesit",
+         "text": "<p>Como visitante quiero escoger en el formulario el servicio que necesito para que mi solicitud llegue bien clasificada.</p>",
+         "type": "STORY",
+         "epica": "E3",
+         "prioridad": "Should",
+         "sprint": 3,
+         "puntos": 3,
+         "acceptanceCriteria": "<p>El formulario tiene una lista con los servicios y la solicitud se guarda con el servicio escogido.</p>"
+        },
+        {
+         "id": "24",
+         "heading": "HU-19 Como visitante quiero que el formulario me avise si me faltó un dato o",
+         "text": "<p>Como visitante quiero que el formulario me avise si me faltó un dato o escribí mal el correo para corregirlo antes de enviar.</p>",
+         "type": "STORY",
+         "epica": "E3",
+         "prioridad": "Must",
+         "sprint": 3,
+         "puntos": 5,
+         "acceptanceCriteria": "<p>Si falta un dato obligatorio o el correo no es válido, el campo se marca en rojo con un mensaje y no se envía nada.</p>"
+        },
+        {
+         "id": "25",
+         "heading": "HU-20 Como visitante quiero ver un mensaje de confirmación después de enviar",
+         "text": "<p>Como visitante quiero ver un mensaje de confirmación después de enviar el formulario para saber que mi solicitud sí llegó.</p>",
+         "type": "STORY",
+         "epica": "E3",
+         "prioridad": "Should",
+         "sprint": 3,
+         "puntos": 4,
+         "acceptanceCriteria": "<p>Después de enviar aparece un mensaje claro de «enviado»; si algo falla aparece un mensaje de error que sugiere escribir por WhatsApp.</p>"
+        },
+        {
+         "id": "26",
+         "heading": "HU-21 Como visitante quiero un botón flotante de WhatsApp siempre visible",
+         "text": "<p>Como visitante quiero un botón flotante de WhatsApp siempre visible para hablar de inmediato con la empresa.</p>",
+         "type": "STORY",
+         "epica": "E3",
+         "prioridad": "Must",
+         "sprint": 3,
+         "puntos": 4,
+         "acceptanceCriteria": "<p>El botón aparece en todas las páginas, en celular y computador, y abre WhatsApp Business con el número de la empresa y un saludo listo.</p>"
+        },
+        {
+         "id": "27",
+         "heading": "HU-22 Como propietario quiero que los clientes me escriban a WhatsApp Busine",
+         "text": "<p>Como propietario quiero que los clientes me escriban a WhatsApp Business para tener por escrito y como evidencia todo lo que acordamos.</p>",
+         "type": "STORY",
+         "epica": "E3",
+         "prioridad": "Must",
+         "sprint": 3,
+         "puntos": 3,
+         "acceptanceCriteria": "<p>Todos los botones de WhatsApp del sitio llevan al número de WhatsApp Business de la empresa.</p>"
+        },
+        {
+         "id": "28",
+         "heading": "HU-23 Como visitante quiero saber cómo se usarán mis datos personales antes ",
+         "text": "<p>Como visitante quiero saber cómo se usarán mis datos personales antes de enviarlos para sentirme seguro al dejar mi información.</p>",
+         "type": "STORY",
+         "epica": "E3",
+         "prioridad": "Should",
+         "sprint": 3,
+         "puntos": 5,
+         "acceptanceCriteria": "<p>Antes de enviar se muestra un aviso de privacidad y el visitante debe marcar la casilla de autorización (Ley 1581 de 2012).</p>"
+        }
+       ]
+      },
+      {
+       "id": "29",
+       "heading": "E4 - Panel de administración",
+       "type": "EPIC",
+       "epica": "E4",
+       "children": [
+        {
+         "id": "30",
+         "heading": "HU-24 Como propietario quiero entrar al panel de administración con usuario ",
+         "text": "<p>Como propietario quiero entrar al panel de administración con usuario y contraseña para que solo yo pueda cambiar el contenido del sitio.</p>",
+         "type": "STORY",
+         "epica": "E4",
+         "prioridad": "Must",
+         "sprint": 2,
+         "puntos": 10,
+         "acceptanceCriteria": "<p>Solo con usuario y contraseña correctos se entra al panel; sin iniciar sesión no se puede ver ni cambiar nada del panel.</p>"
+        },
+        {
+         "id": "31",
+         "heading": "HU-25 Como propietario quiero agregar un proyecto nuevo con sus fotos y una ",
+         "text": "<p>Como propietario quiero agregar un proyecto nuevo con sus fotos y una descripción para mostrar los trabajos a medida que los entrego.</p>",
+         "type": "STORY",
+         "epica": "E4",
+         "prioridad": "Must",
+         "sprint": 2,
+         "puntos": 12,
+         "acceptanceCriteria": "<p>Desde el panel se crea un proyecto con nombre, descripción y fotos, y aparece en la galería sin tocar el código.</p>"
+        },
+        {
+         "id": "32",
+         "heading": "HU-26 Como propietario quiero subir las fotos del «antes» y del «después» de",
+         "text": "<p>Como propietario quiero subir las fotos del «antes» y del «después» de un proyecto para mostrar el cambio que logramos.</p>",
+         "type": "STORY",
+         "epica": "E4",
+         "prioridad": "Must",
+         "sprint": 2,
+         "puntos": 5,
+         "acceptanceCriteria": "<p>El panel permite marcar cada foto como «antes», «proceso» o «después», y así se muestran en la galería.</p>"
+        },
+        {
+         "id": "33",
+         "heading": "HU-27 Como propietario quiero editar un proyecto ya publicado",
+         "text": "<p>Como propietario quiero editar un proyecto ya publicado para corregir textos o cambiar fotos.</p>",
+         "type": "STORY",
+         "epica": "E4",
+         "prioridad": "Should",
+         "sprint": 4,
+         "puntos": 6,
+         "acceptanceCriteria": "<p>Los cambios guardados en el panel se ven en el sitio de inmediato.</p>"
+        },
+        {
+         "id": "34",
+         "heading": "HU-28 Como propietario quiero ocultar o eliminar un proyecto",
+         "text": "<p>Como propietario quiero ocultar o eliminar un proyecto para quitar de la página lo que ya no quiero mostrar.</p>",
+         "type": "STORY",
+         "epica": "E4",
+         "prioridad": "Should",
+         "sprint": 4,
+         "puntos": 5,
+         "acceptanceCriteria": "<p>Un proyecto oculto no aparece en la galería; antes de eliminar el panel pide confirmación.</p>"
+        },
+        {
+         "id": "35",
+         "heading": "HU-29 Como propietario quiero marcar un proyecto como destacado",
+         "text": "<p>Como propietario quiero marcar un proyecto como destacado para que aparezca en la página de inicio.</p>",
+         "type": "STORY",
+         "epica": "E4",
+         "prioridad": "Could",
+         "sprint": 4,
+         "puntos": 3,
+         "acceptanceCriteria": "<p>Los proyectos marcados como destacados son los que salen en el inicio.</p>"
+        },
+        {
+         "id": "36",
+         "heading": "HU-30 Como propietario quiero asignarle a cada proyecto el tipo de servicio",
+         "text": "<p>Como propietario quiero asignarle a cada proyecto el tipo de servicio para que la galería quede ordenada.</p>",
+         "type": "STORY",
+         "epica": "E4",
+         "prioridad": "Should",
+         "sprint": 2,
+         "puntos": 4,
+         "acceptanceCriteria": "<p>Al crear o editar un proyecto se escoge su servicio de una lista.</p>"
+        },
+        {
+         "id": "37",
+         "heading": "HU-31 Como propietario quiero ver en el panel las solicitudes que llegan por",
+         "text": "<p>Como propietario quiero ver en el panel las solicitudes que llegan por el formulario para filtrar y responder a cada cliente.</p>",
+         "type": "STORY",
+         "epica": "E4",
+         "prioridad": "Must",
+         "sprint": 4,
+         "puntos": 6,
+         "acceptanceCriteria": "<p>El panel lista las solicitudes con fecha, datos del cliente, servicio y mensaje, y se pueden filtrar por servicio.</p>"
+        },
+        {
+         "id": "38",
+         "heading": "HU-32 Como propietario quiero marcar una solicitud como atendida",
+         "text": "<p>Como propietario quiero marcar una solicitud como atendida para saber a quién ya le respondí.</p>",
+         "type": "STORY",
+         "epica": "E4",
+         "prioridad": "Could",
+         "sprint": 4,
+         "puntos": 4,
+         "acceptanceCriteria": "<p>Cada solicitud tiene estado «nueva» o «atendida» y se puede cambiar desde el panel.</p>"
+        },
+        {
+         "id": "39",
+         "heading": "HU-33 Como propietario quiero recibir un aviso en mi correo cuando llega una",
+         "text": "<p>Como propietario quiero recibir un aviso en mi correo cuando llega una solicitud nueva para no dejar a ningún cliente esperando.</p>",
+         "type": "STORY",
+         "epica": "E4",
+         "prioridad": "Should",
+         "sprint": 4,
+         "puntos": 6,
+         "acceptanceCriteria": "<p>Cada envío del formulario genera un correo al propietario con los datos del cliente.</p>"
+        }
+       ]
+      },
+      {
+       "id": "40",
+       "heading": "E5 - Diseño y accesibilidad",
+       "type": "EPIC",
+       "epica": "E5",
+       "children": [
+        {
+         "id": "41",
+         "heading": "HU-34 Como visitante quiero que las letras sean claras y de buen tamaño",
+         "text": "<p>Como visitante quiero que las letras sean claras y de buen tamaño para leer sin esfuerzo, sin importar mi edad.</p>",
+         "type": "STORY",
+         "epica": "E5",
+         "prioridad": "Must",
+         "sprint": 5,
+         "puntos": 4,
+         "acceptanceCriteria": "<p>Los textos usan un tamaño mínimo de 16 px en celular, buen contraste y un tipo de letra sencillo.</p>"
+        },
+        {
+         "id": "42",
+         "heading": "HU-35 Como visitante quiero que el sitio se vea y funcione bien en celular, ",
+         "text": "<p>Como visitante quiero que el sitio se vea y funcione bien en celular, tablet y computador para consultarlo desde donde esté.</p>",
+         "type": "STORY",
+         "epica": "E5",
+         "prioridad": "Must",
+         "sprint": 5,
+         "puntos": 12,
+         "acceptanceCriteria": "<p>Todas las páginas se ven completas y se pueden usar en pantallas de celular, tablet y computador.</p>"
+        },
+        {
+         "id": "43",
+         "heading": "HU-36 Como visitante quiero cambiar entre modo claro y modo oscuro",
+         "text": "<p>Como visitante quiero cambiar entre modo claro y modo oscuro para ver la página como me resulte más cómodo.</p>",
+         "type": "STORY",
+         "epica": "E5",
+         "prioridad": "Should",
+         "sprint": 5,
+         "puntos": 7,
+         "acceptanceCriteria": "<p>Un botón cambia el modo en todo el sitio y la página recuerda la opción escogida en la siguiente visita.</p>"
+        },
+        {
+         "id": "44",
+         "heading": "HU-37 Como visitante quiero reconocer el sello de la marca (iniciales ADB) e",
+         "text": "<p>Como visitante quiero reconocer el sello de la marca (iniciales ADB) en todo el sitio para identificar a la empresa y recordarla.</p>",
+         "type": "STORY",
+         "epica": "E5",
+         "prioridad": "Should",
+         "sprint": 5,
+         "puntos": 5,
+         "acceptanceCriteria": "<p>El sello aparece en el encabezado de todas las páginas y como ícono de la pestaña del navegador.</p>"
+        },
+        {
+         "id": "45",
+         "heading": "HU-38 Como visitante quiero que las fotos carguen rápido",
+         "text": "<p>Como visitante quiero que las fotos carguen rápido para ver la galería sin esperar mucho, incluso con datos móviles.</p>",
+         "type": "STORY",
+         "epica": "E5",
+         "prioridad": "Should",
+         "sprint": 5,
+         "puntos": 8,
+         "acceptanceCriteria": "<p>Las fotos se suben optimizadas y la galería carga en pocos segundos en un celular con datos móviles.</p>"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "lastId": 45,
+   "views": {
+    "Principal": {
+     "default": true,
+     "columns": [
+      {
+       "columnId": "id",
+       "width": 90
+      },
+      {
+       "columnId": "type",
+       "width": 110
+      },
+      {
+       "columnId": "description",
+       "width": 420
+      },
+      {
+       "columnId": "epica",
+       "width": 130
+      },
+      {
+       "columnId": "prioridad",
+       "width": 120
+      },
+      {
+       "columnId": "sprint",
+       "width": 80
+      },
+      {
+       "columnId": "puntos",
+       "width": 80
+      },
+      {
+       "columnId": "acceptanceCriteria",
+       "width": 320
+      }
+     ]
+    },
+    "Trazabilidad": {
+     "columns": [
+      {
+       "columnId": "id",
+       "width": 80
+      },
+      {
+       "columnId": "description",
+       "width": 430
+      },
+      {
+       "columnId": "prioridad",
+       "width": 110
+      },
+      {
+       "templateColumnId": "a1b2c3d4-0001-4000-8000-000000000001",
+       "width": 300
+      }
+     ]
+    },
+    "Solo Must": {
+     "columns": [
+      {
+       "columnId": "id",
+       "width": 80
+      },
+      {
+       "columnId": "description",
+       "width": 470
+      },
+      {
+       "columnId": "prioridad",
+       "width": 110
+      },
+      {
+       "columnId": "sprint",
+       "width": 70
+      }
+     ],
+     "filter": [
+      [
+       {
+        "attributeId": "prioridad",
+        "criterion": "attribute",
+        "value": "Must"
+       }
+      ]
+     ]
+    }
+   },
+   "templateColumns": {
+    "a1b2c3d4-0001-4000-8000-000000000001": {
+     "label": "Verificado por",
+     "template": "{{#eachInlinkWith type=\"verification\"}}\n  <p>&#x25C2; {{#hyperlink}}{{docObjId}}{{/hyperlink}}: {{shortDescription  maxLength=80}}</p>\n{{/eachInlinkWith}}\n"
+    }
+   }
+  },
+  {
+   "id": "TESTS",
+   "name": "Pruebas - Portafolio ADB",
+   "attributes": {
+    "type": {
+     "name": "Tipo",
+     "type": "enum",
+     "values": [
+      {
+       "key": "SEC",
+       "label": "Sección"
+      },
+      {
+       "key": "EPIC",
+       "label": "Épica"
+      },
+      {
+       "key": "STORY",
+       "label": "Historia de usuario"
+      },
+      {
+       "key": "TEST",
+       "label": "Prueba"
+      }
+     ]
+    },
+    "epica": {
+     "name": "Épica",
+     "type": "enum",
+     "values": [
+      {
+       "key": "E1",
+       "label": "E1 - Presentación de la empresa"
+      },
+      {
+       "key": "E2",
+       "label": "E2 - Galería de proyectos"
+      },
+      {
+       "key": "E3",
+       "label": "E3 - Contacto"
+      },
+      {
+       "key": "E4",
+       "label": "E4 - Panel de administración"
+      },
+      {
+       "key": "E5",
+       "label": "E5 - Diseño y accesibilidad"
+      }
+     ]
+    },
+    "prioridad": {
+     "name": "Prioridad MoSCoW",
+     "type": "enum",
+     "values": [
+      {
+       "key": "Must"
+      },
+      {
+       "key": "Should"
+      },
+      {
+       "key": "Could"
+      }
+     ]
+    },
+    "sprint": {
+     "name": "Sprint",
+     "type": "int"
+    },
+    "puntos": {
+     "name": "Puntos",
+     "type": "int"
+    },
+    "acceptanceCriteria": {
+     "name": "Criterio de aceptación",
+     "type": "xhtml"
+    }
+   },
+   "data": [
+    {
+     "id": "1",
+     "heading": "Pruebas de aceptación - Sprint 1",
+     "type": "SEC",
+     "text": "<p>Pruebas que verifican las historias del Sprint 1 asignadas a Juan Felipe Vergara. Cada prueba cubre su historia de usuario en el documento de requisitos.</p>",
+     "children": [
+      {
+       "id": "2",
+       "heading": "Prueba HU-04: catálogo de servicios",
+       "text": "<p>Se verifica que Servicios muestre los 9 servicios acordados con nombre y descripción corta, sin precios, y que se vea bien en celular y computador.</p>",
+       "type": "TEST",
+       "links": {
+        "verification": [
+         "REQ-7"
+        ]
+       }
+      },
+      {
+       "id": "3",
+       "heading": "Prueba HU-05: obra completa hasta entrega de llaves",
+       "text": "<p>Se verifica que el bloque de obra completa aparezca dentro de Servicios, con título y texto, sin contradecir el catálogo ni el mensaje de cotización.</p>",
+       "type": "TEST",
+       "links": {
+        "verification": [
+         "REQ-8"
+        ]
+       }
+      },
+      {
+       "id": "4",
+       "heading": "Prueba HU-06: detalle de cada servicio",
+       "text": "<p>Se verifica que las 9 fichas abran desde el catálogo con su propia descripción y foto, que &#x27;Volver a Servicios&#x27; funcione y que un servicio inexistente responda 404.</p>",
+       "type": "TEST",
+       "links": {
+        "verification": [
+         "REQ-9"
+        ]
+       }
+      },
+      {
+       "id": "5",
+       "heading": "Prueba HU-10: cómo se cotiza, sin precios",
+       "text": "<p>Se verifica que el mensaje de cotización esté en Servicios y Contacto, que el botón lleve a Contacto y que ninguna de las 5 páginas muestre montos ni símbolos de moneda.</p>",
+       "type": "TEST",
+       "links": {
+        "verification": [
+         "REQ-13"
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "lastId": 5,
+   "views": {
+    "Principal": {
+     "default": true,
+     "columns": [
+      {
+       "columnId": "id",
+       "width": 90
+      },
+      {
+       "columnId": "type",
+       "width": 110
+      },
+      {
+       "columnId": "description",
+       "width": 560
+      }
+     ]
+    },
+    "Trazabilidad": {
+     "columns": [
+      {
+       "columnId": "id",
+       "width": 80
+      },
+      {
+       "columnId": "description",
+       "width": 380
+      },
+      {
+       "templateColumnId": "a1b2c3d4-0002-4000-8000-000000000002",
+       "width": 320
+      }
+     ]
+    }
+   },
+   "templateColumns": {
+    "a1b2c3d4-0002-4000-8000-000000000002": {
+     "label": "Verifica",
+     "template": "{{#eachOutlinkWith type=\"verification\"}}\n  <p>&#x25B8; {{#hyperlink}}{{docObjId}}{{/hyperlink}}: {{shortDescription  maxLength=80}}</p>\n{{/eachOutlinkWith}}\n"
+    }
+   }
+  }
+ ],
+ "hierarchy": [
+  "REQ",
+  "TESTS"
+ ],
+ "attachments": {},
+ "traceability": {
+  "verification": {
+   "name": "Verificación",
+   "source": "Verifica",
+   "target": "Es verificado por"
+  },
+  "reference": {
+   "name": "Referencia",
+   "source": "Referencia a",
+   "target": "Es referenciado por"
+  }
+ },
+ "metadata": {
+  "format": "2.22"
+ }
+}
