@@ -4,10 +4,12 @@ from io import BytesIO
 
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.forms import Select
 from django.test import TestCase, override_settings
 from django.urls import NoReverseMatch, reverse
 from PIL import Image
 
+from .catalogo import SERVICIOS, opciones_servicio
 from .models import FotoProyecto, Proyecto
 
 # Carpeta temporal para las fotos que suben las pruebas; se borra al terminar.
@@ -399,3 +401,153 @@ class AgregarProyectoTests(PanelConSesionTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn('slug', response.context['adminform'].form.errors)
         self.assertEqual(Proyecto.objects.count(), 1)
+
+
+class ServicioDelProyectoTests(PanelConSesionTestCase):
+    """HU-30 · Asignar servicio al proyecto."""
+
+    def opciones_del_selector(self, response):
+        formulario = response.context['adminform'].form
+        return [
+            (valor, texto)
+            for valor, texto in formulario.fields['servicio'].choices
+            if valor != ''
+        ]
+
+    def crear_proyecto(self, slug, servicio):
+        self.enviar_alta(datos_de_alta(
+            nombre=f'Obra de {servicio}',
+            slug=slug,
+            servicio=servicio,
+        ))
+        return Proyecto.objects.get(slug=slug)
+
+    def test_el_alta_ofrece_una_lista_con_los_nueve_servicios(self):
+        response = self.client.get(self.url_alta)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.opciones_del_selector(response), opciones_servicio())
+        self.assertEqual(len(self.opciones_del_selector(response)), 9)
+
+    def test_el_servicio_es_una_lista_desplegable_no_un_texto_libre(self):
+        response = self.client.get(self.url_alta)
+
+        formulario = response.context['adminform'].form
+        self.assertIsInstance(formulario.fields['servicio'].widget, Select)
+        self.assertContains(response, '<select name="servicio"')
+        self.assertContains(response, '<option value="pintura">Pintura</option>')
+
+    def test_la_lista_trae_los_servicios_del_catalogo(self):
+        response = self.client.get(self.url_alta)
+
+        self.assertEqual(
+            [valor for valor, _ in self.opciones_del_selector(response)],
+            [servicio['slug'] for servicio in SERVICIOS],
+        )
+
+    def test_la_edicion_tambien_ofrece_la_lista_de_servicios(self):
+        proyecto = self.crear_proyecto('obra-pisos', 'pisos')
+
+        response = self.client.get(
+            reverse('admin:sitio_proyecto_change', args=[proyecto.pk])
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.opciones_del_selector(response), opciones_servicio())
+        self.assertContains(
+            response,
+            '<option value="pisos" selected>Pisos</option>',
+        )
+
+    def test_el_servicio_escogido_queda_guardado(self):
+        proyecto = self.crear_proyecto('obra-estuco', 'estuco')
+
+        self.assertEqual(proyecto.servicio, 'estuco')
+        self.assertEqual(proyecto.nombre_del_servicio, 'Estuco')
+
+    def test_se_puede_cambiar_el_servicio_al_editar(self):
+        proyecto = self.crear_proyecto('obra-pisos', 'pisos')
+        url = reverse('admin:sitio_proyecto_change', args=[proyecto.pk])
+        fotos = list(proyecto.fotos.order_by('orden'))
+
+        datos = {
+            'nombre': proyecto.nombre,
+            'slug': proyecto.slug,
+            'servicio': 'carpinteria',
+            'descripcion': proyecto.descripcion,
+            'fotos-TOTAL_FORMS': str(len(fotos)),
+            'fotos-INITIAL_FORMS': str(len(fotos)),
+            'fotos-MIN_NUM_FORMS': '1',
+            'fotos-MAX_NUM_FORMS': '1000',
+        }
+        for numero, existente in enumerate(fotos):
+            datos.update({
+                f'fotos-{numero}-id': str(existente.pk),
+                f'fotos-{numero}-proyecto': str(proyecto.pk),
+                f'fotos-{numero}-tipo': existente.tipo,
+                f'fotos-{numero}-orden': str(existente.orden),
+                f'fotos-{numero}-descripcion': existente.descripcion,
+            })
+
+        response = self.client.post(url, datos)
+
+        self.assertEqual(response.status_code, 302)
+        proyecto.refresh_from_db()
+        self.assertEqual(proyecto.servicio, 'carpinteria')
+
+    def test_un_servicio_fuera_del_catalogo_no_se_guarda(self):
+        response = self.enviar_alta(datos_de_alta(servicio='plomeria'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('servicio', response.context['adminform'].form.errors)
+        self.assertEqual(Proyecto.objects.count(), 0)
+
+    def test_sin_servicio_no_se_guarda(self):
+        response = self.enviar_alta(datos_de_alta(servicio=''))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('servicio', response.context['adminform'].form.errors)
+        self.assertEqual(Proyecto.objects.count(), 0)
+
+    def test_cada_uno_de_los_nueve_servicios_se_puede_asignar(self):
+        for servicio in SERVICIOS:
+            with self.subTest(servicio=servicio['slug']):
+                proyecto = self.crear_proyecto(
+                    f"obra-{servicio['slug']}",
+                    servicio['slug'],
+                )
+                self.assertEqual(proyecto.servicio, servicio['slug'])
+        self.assertEqual(Proyecto.objects.count(), 9)
+
+    def test_la_galeria_filtra_el_proyecto_por_su_servicio(self):
+        self.crear_proyecto('obra-pintura', 'pintura')
+        self.crear_proyecto('obra-pisos', 'pisos')
+        galeria = reverse('sitio:galeria')
+
+        pintura = self.client.get(galeria + '?servicio=pintura')
+        pisos = self.client.get(galeria + '?servicio=pisos')
+
+        self.assertContains(pintura, 'Obra de pintura')
+        self.assertNotContains(pintura, 'Obra de pisos')
+        self.assertContains(pisos, 'Obra de pisos')
+        self.assertNotContains(pisos, 'Obra de pintura')
+
+    def test_la_galeria_muestra_el_nombre_del_servicio_del_proyecto(self):
+        self.crear_proyecto('obra-pintura', 'pintura')
+
+        response = self.client.get(reverse('sitio:galeria'))
+
+        self.assertContains(response, 'Pintura')
+
+    def test_la_lista_del_panel_muestra_y_filtra_por_servicio(self):
+        self.crear_proyecto('obra-pintura', 'pintura')
+        self.crear_proyecto('obra-pisos', 'pisos')
+        lista = reverse('admin:sitio_proyecto_changelist')
+
+        todos = self.client.get(lista)
+        solo_pintura = self.client.get(lista + '?servicio__exact=pintura')
+
+        self.assertContains(todos, 'Pintura')
+        self.assertContains(todos, 'Pisos')
+        self.assertContains(solo_pintura, 'Obra de pintura')
+        self.assertNotContains(solo_pintura, 'Obra de pisos')

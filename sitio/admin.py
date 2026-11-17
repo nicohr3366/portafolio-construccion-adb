@@ -34,9 +34,8 @@ class ProyectoAdmin(admin.ModelAdmin):
     fields = ['nombre', 'slug', 'servicio', 'descripcion', 'es_obra_grande']
     prepopulated_fields = {'slug': ['nombre']}
     inlines = [FotoProyectoInline]
-    # El servicio se agrega a la lista y a los filtros en HU-30.
-    list_display = ['nombre', 'es_obra_grande', 'numero_de_fotos', 'creado']
-    list_filter = ['es_obra_grande']
+    list_display = ['nombre', 'servicio', 'es_obra_grande', 'numero_de_fotos', 'creado']
+    list_filter = ['servicio', 'es_obra_grande']
     search_fields = ['nombre', 'descripcion']
 
     @admin.display(description='Fotos')
