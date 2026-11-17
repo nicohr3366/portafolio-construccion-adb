@@ -551,3 +551,112 @@ class ServicioDelProyectoTests(PanelConSesionTestCase):
         self.assertContains(todos, 'Pisos')
         self.assertContains(solo_pintura, 'Obra de pintura')
         self.assertNotContains(solo_pintura, 'Obra de pisos')
+
+
+class TipoDeFotoTests(PanelConSesionTestCase):
+    """HU-26 · Subir fotos antes, proceso y después."""
+
+    def galeria(self):
+        return self.client.get(reverse('sitio:galeria')).content.decode()
+
+    def seccion_antes_y_despues(self):
+        html = self.galeria()
+        if 'comparacion-titulo' not in html:
+            return ''
+        return html[html.index('comparacion-titulo'):]
+
+    def test_el_tipo_de_foto_ofrece_antes_proceso_y_despues(self):
+        response = self.client.get(self.url_alta)
+
+        formset = response.context['inline_admin_formsets'][0].formset
+        self.assertEqual(
+            list(formset.empty_form.fields['tipo'].choices),
+            [('antes', 'Antes'), ('proceso', 'Proceso'), ('despues', 'Después')],
+        )
+        self.assertContains(response, '<option value="antes">Antes</option>')
+        self.assertContains(response, '<option value="proceso">Proceso</option>')
+        self.assertContains(response, 'Después</option>')
+
+    def test_si_no_se_escoge_el_tipo_la_foto_queda_como_despues(self):
+        response = self.client.get(self.url_alta)
+
+        formset = response.context['inline_admin_formsets'][0].formset
+        self.assertEqual(formset.empty_form.fields['tipo'].initial, 'despues')
+        self.assertContains(
+            response,
+            '<option value="despues" selected>Después</option>',
+        )
+
+    def test_cada_foto_guarda_el_tipo_escogido(self):
+        datos = datos_de_alta(**{
+            'fotos-TOTAL_FORMS': '3',
+            'fotos-0-tipo': 'antes',
+            'fotos-1-tipo': 'proceso',
+            'fotos-2-imagen': foto('despues.png'),
+            'fotos-2-tipo': 'despues',
+        })
+
+        self.enviar_alta(datos)
+
+        proyecto = Proyecto.objects.get()
+        self.assertEqual(len(proyecto.fotos_antes), 1)
+        self.assertEqual(len(proyecto.fotos_proceso), 1)
+        self.assertEqual(len(proyecto.fotos_despues), 1)
+
+    def test_cada_foto_guarda_el_orden_indicado(self):
+        datos = datos_de_alta(**{
+            'fotos-0-orden': '5',
+            'fotos-0-descripcion': 'Segunda',
+            'fotos-1-orden': '2',
+            'fotos-1-descripcion': 'Primera',
+        })
+
+        self.enviar_alta(datos)
+
+        fotos = list(Proyecto.objects.get().fotos.all())
+        self.assertEqual([una_foto.orden for una_foto in fotos], [2, 5])
+        self.assertEqual(
+            [una_foto.descripcion for una_foto in fotos],
+            ['Primera', 'Segunda'],
+        )
+
+    def test_proyecto_con_antes_y_despues_aparece_en_la_seccion_antes_y_despues(self):
+        self.enviar_alta(datos_de_alta())
+        proyecto = Proyecto.objects.get()
+        seccion = self.seccion_antes_y_despues()
+
+        self.assertIn('Antes y después', seccion)
+        self.assertIn('Obra de prueba', seccion)
+        self.assertIn('<figcaption>Antes</figcaption>', seccion)
+        self.assertIn('<figcaption>Después</figcaption>', seccion)
+        self.assertIn(proyecto.fotos_antes[0].imagen.url, seccion)
+        self.assertIn(proyecto.fotos_despues[0].imagen.url, seccion)
+
+    def test_proyecto_solo_con_fotos_de_despues_no_aparece_en_la_seccion(self):
+        datos = datos_de_alta(**{'fotos-0-tipo': 'despues'})
+
+        self.enviar_alta(datos)
+
+        self.assertIn('Obra de prueba', self.galeria())
+        self.assertNotIn('Obra de prueba', self.seccion_antes_y_despues())
+
+    def test_proyecto_solo_con_antes_y_proceso_no_aparece_en_la_seccion(self):
+        datos = datos_de_alta(**{
+            'fotos-0-tipo': 'antes',
+            'fotos-1-tipo': 'proceso',
+        })
+
+        self.enviar_alta(datos)
+
+        self.assertNotIn('Obra de prueba', self.seccion_antes_y_despues())
+
+    def test_la_edicion_muestra_una_vista_previa_de_cada_foto(self):
+        self.enviar_alta(datos_de_alta())
+        proyecto = Proyecto.objects.get()
+
+        response = self.client.get(
+            reverse('admin:sitio_proyecto_change', args=[proyecto.pk])
+        )
+
+        for una_foto in proyecto.fotos.all():
+            self.assertContains(response, f'<img src="{una_foto.imagen.url}"')
