@@ -1,5 +1,8 @@
+from urllib.parse import urlencode
+
 from django.http import Http404
 from django.shortcuts import get_object_or_404, render
+from django.urls import reverse
 
 from .catalogo import SERVICIOS, nombre_servicio, opciones_servicio
 from .models import Proyecto
@@ -94,11 +97,17 @@ def proyecto_detalle(request, slug):
         publicado=True,
     )
 
-    return render(
-        request,
-        'sitio/proyecto_detalle.html',
-        {'proyecto': proyecto}
+    consulta = urlencode(
+        {'servicio': proyecto.servicio, 'proyecto': proyecto.slug}
     )
+    contexto = {
+        'proyecto': proyecto,
+        'url_cotizacion': (
+            f"{reverse('sitio:contacto')}?{consulta}#formulario-contacto"
+        ),
+        'url_volver': reverse('sitio:galeria'),
+    }
+    return render(request, 'sitio/proyecto_detalle.html', contexto)
 
 
 def quienes_somos(request):

@@ -5,10 +5,13 @@
 
 {% block extra_head %}
     <link rel="stylesheet" href="{% static 'css/galeria.css' %}">
+    <link rel="stylesheet" href="{% static 'css/proyecto_detalle.css' %}">
+    <link rel="stylesheet" href="{% static 'css/antes_despues.css' %}">
+    <link rel="stylesheet" href="{% static 'css/cotizacion.css' %}">
+    <script src="{% static 'js/proyecto_detalle.js' %}" defer></script>
 {% endblock %}
 
 {% block content %}
-{# Versión mínima: la completa es HU-14 #}
 <nav class="galeria-migas" aria-label="Ruta de navegación">
     <a href="{% url 'sitio:galeria' %}">Galería</a>
     <span aria-hidden="true">&gt;</span>
@@ -16,29 +19,107 @@
 </nav>
 
 <article class="proyecto-detalle" aria-labelledby="proyecto-titulo">
+    <header class="proyecto__encabezado">
+        {% if proyecto.es_obra_grande %}
+        <p class="proyecto__etiqueta">Obra de gran escala</p>
+        {% endif %}
+        <h1 id="proyecto-titulo">{{ proyecto.nombre }}</h1>
+        <a class="proyecto-detalle__servicio" href="{% url 'sitio:galeria' %}?servicio={{ proyecto.servicio }}">{{ proyecto.nombre_del_servicio }}</a>
+        <div class="proyecto__accion">
+            <a class="boton-cotizacion proyecto__cotizar" href="{{ url_cotizacion }}">Pedir cotización de un trabajo así</a>
+        </div>
+    </header>
+
     {% with foto=proyecto.foto_portada %}
         {% if foto %}
-        <img
-            class="proyecto-detalle__foto"
-            src="{{ foto.imagen.url }}"
-            alt="{{ foto.texto_alternativo }}"
-            width="1200"
-            height="800"
-        >
+        <a class="proyecto__ampliar proyecto__ampliar--principal" href="{{ foto.imagen.url }}" data-ampliar data-alt="{{ foto.texto_alternativo }}">
+            <img class="proyecto-detalle__foto" src="{{ foto.imagen.url }}" alt="{{ foto.texto_alternativo }}" width="1200" height="800">
+            <span class="visually-hidden">Ampliar foto</span>
+        </a>
         {% else %}
-        <img
-            class="proyecto-detalle__foto"
-            src="{% static 'img/galeria/sin-foto.svg' %}"
-            alt=""
-            width="1200"
-            height="800"
-        >
+        <img class="proyecto-detalle__foto" src="{% static 'img/galeria/sin-foto.svg' %}" alt="" width="1200" height="800">
         {% endif %}
     {% endwith %}
-    <h1 id="proyecto-titulo">{{ proyecto.nombre }}</h1>
-    <p class="proyecto-detalle__servicio">{{ proyecto.nombre_del_servicio }}</p>
+
     {# POR DEFINIR con Alexander #}
     {{ proyecto.descripcion|linebreaks }}
-    <a class="proyecto-detalle__volver" href="{% url 'sitio:galeria' %}">Volver a la galería</a>
+
+    {% if proyecto.es_obra_grande %}
+    {# POR DEFINIR con Alexander #}
+    <p class="proyecto__nota-obra">Así avanzó la obra, desde el proceso hasta el resultado final.</p>
+    {% endif %}
+
+    {% if proyecto.tiene_antes_y_despues %}
+    <section class="proyecto__comparacion" aria-labelledby="titulo-comparacion">
+        <h2 id="titulo-comparacion">Antes y después</h2>
+        {% include 'sitio/partials/antes_despues.html' with proyecto=proyecto %}
+    </section>
+    {% endif %}
+
+    {% with fotos=proyecto.fotos_antes %}
+    {% if fotos %}
+    <section class="proyecto__fotos" aria-labelledby="titulo-antes">
+        <h2 id="titulo-antes">Antes</h2>
+        <ul class="proyecto__rejilla">
+            {% for foto in fotos %}
+            <li>
+                <a class="proyecto__ampliar" href="{{ foto.imagen.url }}" data-ampliar data-alt="{{ foto.texto_alternativo }}">
+                    <img src="{{ foto.imagen.url }}" alt="{{ foto.texto_alternativo }}" width="1200" height="800" loading="lazy">
+                    <span class="visually-hidden">Ampliar foto</span>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
+    {% endwith %}
+
+    {% with fotos=proyecto.fotos_proceso %}
+    {% if fotos %}
+    <section class="proyecto__fotos" aria-labelledby="titulo-proceso">
+        <h2 id="titulo-proceso">Proceso de obra</h2>
+        <ul class="proyecto__rejilla">
+            {% for foto in fotos %}
+            <li>
+                <figure class="proyecto__etapa">
+                    <a class="proyecto__ampliar" href="{{ foto.imagen.url }}" data-ampliar data-alt="{{ foto.texto_alternativo }}">
+                        <img src="{{ foto.imagen.url }}" alt="{{ foto.texto_alternativo }}" width="1200" height="800" loading="lazy">
+                        <span class="visually-hidden">Ampliar foto</span>
+                    </a>
+                    <figcaption>Etapa {{ forloop.counter }}</figcaption>
+                </figure>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
+    {% endwith %}
+
+    {% with fotos=proyecto.fotos_despues %}
+    {% if fotos %}
+    <section class="proyecto__fotos" aria-labelledby="titulo-resultado">
+        <h2 id="titulo-resultado">Resultado final</h2>
+        <ul class="proyecto__rejilla">
+            {% for foto in fotos %}
+            <li>
+                <a class="proyecto__ampliar" href="{{ foto.imagen.url }}" data-ampliar data-alt="{{ foto.texto_alternativo }}">
+                    <img src="{{ foto.imagen.url }}" alt="{{ foto.texto_alternativo }}" width="1200" height="800" loading="lazy">
+                    <span class="visually-hidden">Ampliar foto</span>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
+    {% endwith %}
+
+    <a class="proyecto-detalle__volver" href="{{ url_volver }}">Volver a la galería</a>
 </article>
+
+{% include 'sitio/partials/como_se_cotiza.html' with boton_url=url_cotizacion %}
+
+<dialog class="visor" aria-label="Foto ampliada">
+    <img class="visor__imagen" alt="">
+    <button type="button" class="visor__cerrar">Cerrar</button>
+</dialog>
 {% endblock %}

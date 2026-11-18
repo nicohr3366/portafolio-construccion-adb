@@ -12,7 +12,7 @@
             <ul class="nav__list">
                 <li><a class="nav__link" href="{% url 'sitio:inicio' %}"{% if current == 'inicio' %} aria-current="page"{% endif %}>Inicio</a></li>
                 <li><a class="nav__link" href="{% url 'sitio:servicios' %}"{% if current == 'servicios' %} aria-current="page"{% endif %}>Servicios</a></li>
-                <li><a class="nav__link" href="{% url 'sitio:galeria' %}"{% if current == 'galeria' %} aria-current="page"{% endif %}>Galería</a></li>
+                <li><a class="nav__link" href="{% url 'sitio:galeria' %}"{% if current == 'galeria' or current == 'proyecto_detalle' %} aria-current="page"{% endif %}>Galería</a></li>
                 <li><a class="nav__link" href="{% url 'sitio:quienes_somos' %}"{% if current == 'quienes_somos' %} aria-current="page"{% endif %}>Quiénes Somos</a></li>
                 <li><a class="nav__link" href="{% url 'sitio:contacto' %}"{% if current == 'contacto' %} aria-current="page"{% endif %}>Contacto</a></li>
             </ul>
