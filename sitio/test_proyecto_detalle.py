@@ -1,7 +1,9 @@
 import re
 import shutil
 import tempfile
+from io import StringIO
 
+from django.core.management import call_command
 from django.test import TestCase, override_settings
 from django.urls import reverse
 
@@ -178,3 +180,150 @@ class DetalleSinPreciosTests(DetalleTestCase):
 
         self.assertIsNone(re.search(r'\$\s?\d', html))
         self.assertIsNone(re.search(r'\d\s?(COP|pesos)', html, re.IGNORECASE))
+
+
+class ObraGrandeTests(DetalleTestCase):
+    """HU-13 · Obras grandes con su proceso."""
+
+    def setUp(self):
+        self.obra = crear_proyecto(
+            'obra-grande-de-prueba',
+            nombre='Obra grande de prueba',
+            servicio='construccion-desde-cero',
+            es_obra_grande=True,
+        )
+        # Se crean desordenadas a propósito: la página debe respetar `orden`.
+        crear_foto(self.obra, FotoProyecto.Tipo.DESPUES, orden=7,
+                   descripcion='Final segunda')
+        crear_foto(self.obra, FotoProyecto.Tipo.PROCESO, orden=3,
+                   descripcion='Etapa tercera')
+        crear_foto(self.obra, FotoProyecto.Tipo.ANTES, orden=0,
+                   descripcion='Terreno antes')
+        crear_foto(self.obra, FotoProyecto.Tipo.PROCESO, orden=1,
+                   descripcion='Etapa primera')
+        crear_foto(self.obra, FotoProyecto.Tipo.DESPUES, orden=5,
+                   descripcion='Final primera')
+        crear_foto(self.obra, FotoProyecto.Tipo.PROCESO, orden=2,
+                   descripcion='Etapa segunda')
+        self.response, self.html = self.abrir(self.obra)
+
+    def test_las_secciones_salen_en_orden_antes_proceso_y_resultado(self):
+        antes = self.html.index('<h2 id="titulo-antes">Antes</h2>')
+        proceso = self.html.index('<h2 id="titulo-proceso">Proceso de obra</h2>')
+        resultado = self.html.index('<h2 id="titulo-resultado">Resultado final</h2>')
+
+        self.assertLess(antes, proceso)
+        self.assertLess(proceso, resultado)
+
+    def test_muestra_la_etiqueta_de_obra_de_gran_escala(self):
+        self.assertIn(
+            '<p class="proyecto__etiqueta">Obra de gran escala</p>',
+            self.html,
+        )
+
+    def test_muestra_el_parrafo_provisional_de_la_obra(self):
+        self.assertContains(
+            self.response,
+            'Así avanzó la obra, desde el proceso hasta el resultado final.',
+        )
+
+    def test_las_fotos_de_proceso_salen_como_etapas_respetando_el_orden(self):
+        etapas = re.findall(
+            r'<figure class="proyecto__etapa">.*?</figure>',
+            self.html,
+            re.DOTALL,
+        )
+
+        resumen = [
+            (
+                re.search(r'<img src="[^"]*" alt="([^"]*)"', etapa).group(1),
+                re.search(r'<figcaption>([^<]*)</figcaption>', etapa).group(1),
+            )
+            for etapa in etapas
+        ]
+        self.assertEqual(resumen, [
+            ('Etapa primera', 'Etapa 1'),
+            ('Etapa segunda', 'Etapa 2'),
+            ('Etapa tercera', 'Etapa 3'),
+        ])
+
+    def test_el_resultado_final_respeta_el_orden_de_las_fotos(self):
+        inicio = self.html.index('id="titulo-resultado"')
+        resultado = self.html[inicio:]
+
+        self.assertLess(
+            resultado.index('alt="Final primera"'),
+            resultado.index('alt="Final segunda"'),
+        )
+
+    def test_con_antes_y_despues_aparece_el_bloque_comparativo(self):
+        self.assertIn('<h2 id="titulo-comparacion">Antes y después</h2>', self.html)
+        self.assertIn('class="antes-despues"', self.html)
+        self.assertIn('<figcaption>Antes</figcaption>', self.html)
+        self.assertIn('<figcaption>Después</figcaption>', self.html)
+        self.assertLess(
+            self.html.index('id="titulo-comparacion"'),
+            self.html.index('id="titulo-antes"'),
+        )
+        self.assertIn('css/antes_despues.css', self.html)
+
+    def test_un_proyecto_sin_fotos_de_proceso_no_muestra_esa_seccion(self):
+        normal = crear_proyecto('sin-proceso', nombre='Sin proceso')
+        crear_foto(normal, FotoProyecto.Tipo.ANTES)
+        crear_foto(normal, FotoProyecto.Tipo.DESPUES, orden=1)
+
+        _, html = self.abrir(normal)
+
+        self.assertNotIn('Proceso de obra', html)
+        self.assertNotIn('titulo-proceso', html)
+        self.assertIn('Resultado final', html)
+
+    def test_un_proyecto_normal_no_muestra_obra_de_gran_escala(self):
+        normal = crear_proyecto('normal', nombre='Proyecto normal')
+        crear_foto(normal, FotoProyecto.Tipo.DESPUES)
+
+        _, html = self.abrir(normal)
+
+        self.assertNotIn('Obra de gran escala', html)
+        self.assertNotIn('Así avanzó la obra', html)
+
+    def test_solo_aparecen_las_secciones_que_tienen_fotos(self):
+        solo_despues = crear_proyecto('solo-despues', nombre='Solo después')
+        crear_foto(solo_despues, FotoProyecto.Tipo.DESPUES)
+
+        _, html = self.abrir(solo_despues)
+
+        self.assertIn('titulo-resultado', html)
+        self.assertNotIn('titulo-antes', html)
+        self.assertNotIn('titulo-proceso', html)
+        self.assertNotIn('titulo-comparacion', html)
+
+    def test_un_proyecto_sin_antes_y_despues_no_muestra_el_comparativo(self):
+        solo_antes = crear_proyecto('solo-antes', nombre='Solo antes')
+        crear_foto(solo_antes, FotoProyecto.Tipo.ANTES)
+
+        _, html = self.abrir(solo_antes)
+
+        self.assertNotIn('Antes y después', html)
+        self.assertIn('titulo-antes', html)
+
+    def test_el_proyecto_de_ejemplo_muestra_toda_la_secuencia(self):
+        call_command('cargar_proyectos_ejemplo', stdout=StringIO())
+        response = self.client.get('/galeria/ejemplo-obra-grande/')
+        html = response.content.decode()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Obra de gran escala', html)
+        self.assertIn('<figcaption>Etapa 1</figcaption>', html)
+        self.assertIn('<figcaption>Etapa 2</figcaption>', html)
+        self.assertIn('<figcaption>Etapa 3</figcaption>', html)
+        self.assertNotIn('Etapa 4', html)
+        self.assertLess(html.index('titulo-antes'), html.index('titulo-proceso'))
+        self.assertLess(html.index('titulo-proceso'), html.index('titulo-resultado'))
+
+    def test_no_se_publican_nombres_reales_de_obras(self):
+        call_command('cargar_proyectos_ejemplo', stdout=StringIO())
+        html = self.client.get('/galeria/ejemplo-obra-grande/').content.decode()
+
+        self.assertNotIn('Sagrada', html)
+        self.assertNotIn('Colegio La', html)
