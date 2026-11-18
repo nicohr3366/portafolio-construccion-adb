@@ -1,3 +1,4 @@
+import html as html_utils
 import re
 import shutil
 import tempfile
@@ -7,6 +8,7 @@ from django.core.management import call_command
 from django.test import TestCase, override_settings
 from django.urls import reverse
 
+from .catalogo import SERVICIOS
 from .models import FotoProyecto
 from .test_galeria import crear_foto, crear_proyecto
 
@@ -327,3 +329,96 @@ class ObraGrandeTests(DetalleTestCase):
 
         self.assertNotIn('Sagrada', html)
         self.assertNotIn('Colegio La', html)
+
+
+class CotizacionDesdeProyectoTests(DetalleTestCase):
+    """HU-16 · Pedir cotización desde un proyecto."""
+
+    def setUp(self):
+        self.proyecto = crear_proyecto(
+            'cocina-de-prueba',
+            nombre='Cocina de prueba',
+            servicio='remodelacion',
+        )
+        crear_foto(self.proyecto, FotoProyecto.Tipo.DESPUES)
+        self.url = (
+            '/contacto/?servicio=remodelacion&proyecto=cocina-de-prueba'
+            '#formulario-contacto'
+        )
+        self.response, self.html = self.abrir(self.proyecto)
+        # En el HTML el & se escribe como &amp;.
+        self.href = f'href="{html_utils.escape(self.url)}"'
+
+    def test_la_vista_arma_la_direccion_de_cotizacion(self):
+        self.assertEqual(self.response.context['url_cotizacion'], self.url)
+
+    def test_el_boton_de_cotizacion_apunta_al_formulario_de_contacto(self):
+        self.assertIn(
+            f'<a class="boton-cotizacion proyecto__cotizar" {self.href}>'
+            'Pedir cotización de un trabajo así</a>',
+            self.html,
+        )
+
+    def test_el_boton_esta_cerca_del_titulo_antes_de_las_fotos(self):
+        boton = self.html.index('Pedir cotización de un trabajo así')
+
+        self.assertGreater(boton, self.html.index('<h1'))
+        self.assertLess(boton, self.html.index('class="proyecto-detalle__foto"'))
+
+    def test_aparece_el_bloque_como_se_cotiza_con_el_mismo_enlace(self):
+        self.assertIn('<h2 id="cotizacion-titulo">¿Cómo se cotiza?</h2>', self.html)
+        self.assertIn(
+            f'<a class="boton-cotizacion" {self.href}>Pedir cotización</a>',
+            self.html,
+        )
+
+    def test_los_dos_botones_llevan_a_la_misma_direccion(self):
+        self.assertEqual(self.html.count(self.href), 2)
+
+    def test_el_bloque_como_se_cotiza_va_al_final_de_la_pagina(self):
+        self.assertGreater(
+            self.html.index('id="cotizacion-titulo"'),
+            self.html.index('Volver a la galería'),
+        )
+
+    def test_se_carga_el_estilo_de_cotizacion(self):
+        self.assertIn('css/cotizacion.css', self.html)
+
+    def test_el_enlace_lleva_el_servicio_de_cada_proyecto(self):
+        for servicio in SERVICIOS:
+            with self.subTest(servicio=servicio['slug']):
+                proyecto = crear_proyecto(
+                    f"obra-{servicio['slug']}",
+                    servicio=servicio['slug'],
+                )
+
+                response, _ = self.abrir(proyecto)
+
+                self.assertEqual(
+                    response.context['url_cotizacion'],
+                    f"/contacto/?servicio={servicio['slug']}"
+                    f"&proyecto=obra-{servicio['slug']}#formulario-contacto",
+                )
+
+    def test_un_proyecto_sin_fotos_tambien_tiene_el_boton(self):
+        vacio = crear_proyecto('sin-fotos', servicio='pintura')
+
+        _, html = self.abrir(vacio)
+
+        self.assertIn('Pedir cotización de un trabajo así', html)
+        self.assertIn('¿Cómo se cotiza?', html)
+
+    def test_el_recorrido_completo_llega_a_la_pagina_de_contacto(self):
+        galeria = self.client.get(reverse('sitio:galeria'))
+        self.assertContains(galeria, self.proyecto.get_absolute_url())
+
+        detalle = self.client.get(self.proyecto.get_absolute_url())
+        self.assertEqual(detalle.status_code, 200)
+
+        # El navegador no envía la parte #formulario-contacto al servidor.
+        contacto = self.client.get(self.url.split('#')[0])
+        self.assertEqual(contacto.status_code, 200)
+        self.assertTemplateUsed(contacto, 'sitio/contacto.html')
+
+    def test_los_botones_no_muestran_precios(self):
+        self.assertIsNone(re.search(r'\$\s?\d', self.html))

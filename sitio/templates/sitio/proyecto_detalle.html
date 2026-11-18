@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{% static 'css/galeria.css' %}">
     <link rel="stylesheet" href="{% static 'css/proyecto_detalle.css' %}">
     <link rel="stylesheet" href="{% static 'css/antes_despues.css' %}">
+    <link rel="stylesheet" href="{% static 'css/cotizacion.css' %}">
     <script src="{% static 'js/proyecto_detalle.js' %}" defer></script>
 {% endblock %}
 
@@ -24,6 +25,9 @@
         {% endif %}
         <h1 id="proyecto-titulo">{{ proyecto.nombre }}</h1>
         <a class="proyecto-detalle__servicio" href="{% url 'sitio:galeria' %}?servicio={{ proyecto.servicio }}">{{ proyecto.nombre_del_servicio }}</a>
+        <div class="proyecto__accion">
+            <a class="boton-cotizacion proyecto__cotizar" href="{{ url_cotizacion }}">Pedir cotización de un trabajo así</a>
+        </div>
     </header>
 
     {% with foto=proyecto.foto_portada %}
@@ -111,6 +115,8 @@
 
     <a class="proyecto-detalle__volver" href="{{ url_volver }}">Volver a la galería</a>
 </article>
+
+{% include 'sitio/partials/como_se_cotiza.html' with boton_url=url_cotizacion %}
 
 <dialog class="visor" aria-label="Foto ampliada">
     <img class="visor__imagen" alt="">

@@ -27,6 +27,15 @@
     color: var(--color-primary);
 }
 
+/* Pedir cotización (HU-16). */
+.proyecto__accion {
+    margin-top: var(--space-sm);
+}
+
+.proyecto-detalle ~ .cotizacion {
+    max-width: 48rem;
+}
+
 /* Enlace de cada foto: abre la foto completa y, con JavaScript, el visor. */
 .proyecto__ampliar {
     position: relative;
