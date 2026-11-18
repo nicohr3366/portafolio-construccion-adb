@@ -1,0 +1,153 @@
+/* Texto solo para lectores de pantalla (base.css no lo define). */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+.proyecto__encabezado {
+    margin-bottom: var(--space-md);
+}
+
+.proyecto__encabezado h1 {
+    margin-bottom: var(--space-xs);
+}
+
+.proyecto-detalle__servicio {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    color: var(--color-primary);
+}
+
+/* Pedir cotización (HU-16). */
+.proyecto__accion {
+    margin-top: var(--space-sm);
+}
+
+.proyecto-detalle ~ .cotizacion {
+    max-width: 48rem;
+}
+
+/* Enlace de cada foto: abre la foto completa y, con JavaScript, el visor. */
+.proyecto__ampliar {
+    position: relative;
+    display: block;
+    border-radius: var(--radius);
+    cursor: zoom-in;
+}
+
+.proyecto__ampliar img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    border-radius: var(--radius);
+}
+
+.proyecto__ampliar:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+}
+
+.proyecto__fotos,
+.proyecto__comparacion {
+    margin-top: var(--space-xl);
+}
+
+/* Obras grandes (HU-13). */
+.proyecto__etiqueta {
+    display: inline-block;
+    margin: 0 0 var(--space-sm);
+    padding: var(--space-xs) var(--space-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+.proyecto__nota-obra {
+    color: var(--color-text-muted);
+}
+
+.proyecto__etapa {
+    margin: 0;
+}
+
+.proyecto__etapa figcaption {
+    padding-top: var(--space-xs);
+    color: var(--color-text-muted);
+    font-weight: 700;
+}
+
+.proyecto__rejilla {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+    gap: var(--space-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* Visor de fotos ampliadas (<dialog>). */
+.visor {
+    width: fit-content;
+    max-width: 90vw;
+    max-height: 90vh;
+    padding: var(--space-md);
+    border: 0;
+    border-radius: var(--radius);
+    background: var(--color-bg);
+    color: var(--color-text);
+}
+
+.visor[open] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.visor::backdrop {
+    background: rgb(0 0 0 / 0.75);
+}
+
+.visor__imagen {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: calc(90vh - 7rem);
+    object-fit: contain;
+}
+
+.visor__cerrar {
+    min-width: 44px;
+    min-height: 44px;
+    padding: var(--space-sm) var(--space-lg);
+    border: 0;
+    border-radius: var(--radius);
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.visor__cerrar:hover {
+    background: var(--color-text);
+}
+
+.visor__cerrar:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+}
